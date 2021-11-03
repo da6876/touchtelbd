@@ -26,5 +26,10 @@
     <!-- BEGIN CSS for this page -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
     <!-- END CSS for this page -->
+    <!-- BEGIN CSS for this page -->
+    <link href="{{asset('public/assets/plugins/datetimepicker/css/daterangepicker.css')}}" rel="stylesheet" />
 
+    <!-- BEGIN CSS for this page -->
+    <link href="{{asset('public/assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css"/>
+    <!-- END CSS for this page -->
 </head>

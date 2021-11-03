@@ -20,14 +20,16 @@ $userType = Session::get('user_type_id');
                     </li>
 
                     <li class="submenu">
-                        <a href="{{url('Home')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span> <span class="menu-arrow"></span></a>
+                        <a href="{{url('RegulerSell')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span> <span class="menu-arrow"></span></a>
                     </li>
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-gift bigfonts"></i> <span>Product Setup</span> <span class="menu-arrow"></span></a>
                         <ul class="list-unstyled" >
                             <li class=""><a href="{{url('ProductType')}}"><i class="fa fa-asl-interpreting bigfonts"></i> Product Type</a></li>
                             <li class=""><a href="{{url('CategoriesInfo')}}"><i class="fa fa-certificate bigfonts"></i> Category</a></li>
+                            <li class=""><a href="{{url('AddProduct')}}"><i class="fa fa-cube bigfonts"></i> Add Product</a></li>
                             <li class=""><a href="{{url('ProductInfo')}}"><i class="fa fa-cube bigfonts"></i> Product Info</a></li>
+                            <li class=""><a href="{{url('CustomerInfo')}}"><i class="fa fa-cube bigfonts"></i> Customer Info</a></li>
                         </ul>
                     </li>
 
@@ -42,7 +44,9 @@ $userType = Session::get('user_type_id');
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-hourglass-half bigfonts"></i> <span>Stock Manage </span> <span class="menu-arrow"></span></a>
                         <ul class="list-unstyled" >
-                            <li class=""><a href="{{url('ProductStock')}}"><i class="fa fa-hourglass-start bigfonts"></i> Product Stock</a></li>
+                            <li class=""><a href="{{url('ProductStockInfo')}}"><i class="fa fa-hourglass-start bigfonts"></i>Product Stock</a></li>
+                            <li class=""><a href="{{url('ProductStock')}}"><i class="fa fa-hourglass-start bigfonts"></i>Add Stock</a></li>
+                            <li class=""><a href="{{url('ProductStockBulk')}}"><i class="fa fa-hourglass-start bigfonts"></i>Bulk Add Stock</a></li>
                         </ul>
                     </li>
 
@@ -74,14 +78,16 @@ $userType = Session::get('user_type_id');
                     </li>
 
                     <li class="submenu">
-                        <a href="{{url('Home')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span> <span class="menu-arrow"></span></a>
+                        <a href="{{url('RegulerSell')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span> <span class="menu-arrow"></span></a>
                     </li>
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-gift bigfonts"></i> <span>Product Setup</span> <span class="menu-arrow"></span></a>
                         <ul class="list-unstyled" >
                             <li class=""><a href="{{url('ProductType')}}"><i class="fa fa-asl-interpreting bigfonts"></i> Product Type</a></li>
                             <li class=""><a href="{{url('CategoriesInfo')}}"><i class="fa fa-certificate bigfonts"></i> Category</a></li>
+                            <li class=""><a href="{{url('AddProduct')}}"><i class="fa fa-cube bigfonts"></i> Add Product</a></li>
                             <li class=""><a href="{{url('ProductInfo')}}"><i class="fa fa-cube bigfonts"></i> Product Info</a></li>
+                            <li class=""><a href="{{url('CustomerInfo')}}"><i class="fa fa-cube bigfonts"></i> Customer Info</a></li>
                         </ul>
                     </li>
 
@@ -95,7 +101,9 @@ $userType = Session::get('user_type_id');
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-hourglass-half bigfonts"></i> <span>Stock Manage </span> <span class="menu-arrow"></span></a>
                         <ul class="list-unstyled" >
-                            <li class=""><a href="{{url('ProductStock')}}"><i class="fa fa-hourglass-start bigfonts"></i> Product Stock</a></li>
+                            <li class=""><a href="{{url('ProductStockInfo')}}"><i class="fa fa-hourglass-start bigfonts"></i>Product Stock</a></li>
+                            <li class=""><a href="{{url('ProductStock')}}"><i class="fa fa-hourglass-start bigfonts"></i>Add Stock</a></li>
+                            <li class=""><a href="{{url('ProductStockBulk')}}"><i class="fa fa-hourglass-start bigfonts"></i>Bulk Add Stock</a></li>
                         </ul>
                     </li>
 
@@ -121,7 +129,7 @@ $userType = Session::get('user_type_id');
                     </li>
 
                     <li class="submenu">
-                        <a href="{{url('Home')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span> <span class="menu-arrow"></span></a>
+                        <a href="{{url('RegulerSell')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span> <span class="menu-arrow"></span></a>
                     </li>
 
                     <li class="submenu">

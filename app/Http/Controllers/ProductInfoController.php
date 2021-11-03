@@ -31,6 +31,18 @@ class ProductInfoController extends Controller
         }
     }
 
+    public function indexs()
+    {
+        $this->AuthCheck();
+
+        try {
+            DB::connection()->getPdo();
+            return view('productconfig.product_add');
+        } catch (\Exception $e) {
+            return view('errorpage.database_error');
+        }
+    }
+
 
     public function store(Request $request)
     {
@@ -39,23 +51,16 @@ class ProductInfoController extends Controller
             $data['product_name'] = $request['product_name'];
             $data['product_type_id'] = $request['product_type_id'];
             $data['Categorie_id'] = $request['Categorie_id'];
-            $data['sub_Categorie_id'] = $request['sub_Categorie_id'];
-            $data['shot_decs'] = $request['shot_decs'];
             $data['decs'] = $request['decs'];
-            $data['Gm'] = $request['Gm'];
-            $data['Pcs_Per_Ctn'] = $request['Pcs_Per_Ctn'];
-            $data['dp_unit'] = $request['dp_unit'];
-            $data['rp_unit'] = $request['rp_unit'];
-            $data['mrp_unit'] = $request['mrp_unit'];
-            $data['product_sku_code'] = $request['product_sku_code'];
             $data['product_status'] = $request['product_status'];
-            $data['create_by'] = "Static";
+            $data['create_by'] = Session::get('user_info_id');
+            $data['update_by'] = "N";
 
             $image_one = $request['product_image'];
             if ($image_one) {
-                $ran_one = str_random(10);
+                $ran_one = str_random(15);
                 $ext_one = strtolower($image_one->getClientOriginalExtension());
-                $one_full_name = $ran_one . $ext_one;
+                $one_full_name = $ran_one .'.'. $ext_one;
                 $upload_path_one = "allImages/ProductImages/";
                 $image_url_one = $upload_path_one . $one_full_name;
                 $success_one = $image_one->move($upload_path_one, $one_full_name);

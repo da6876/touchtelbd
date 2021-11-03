@@ -43,7 +43,23 @@ Route::get('/get/all/ProductType','ProductTypeController@getAllProductType')->na
 Route::resource('CategoriesInfo','CategoryInfoController');
 Route::get('/get/all/Categories','CategoryInfoController@getAllcategories')->name('all.Categories');
 
+Route::resource('CustomerInfo','CustomerController');
+Route::get('/get/all/Customer','CustomerController@getAllCustomer')->name('all.Customer');
+
 Route::resource('ProductInfo','ProductInfoController');
 Route::get('/get/all/ProductInfo','ProductInfoController@getAllProductInfo')->name('all.ProductInfo');
+Route::get('AddProduct','ProductInfoController@indexs');
 Route::get('getProductType','ProductInfoController@showProductType');
 Route::get('getCategories','ProductInfoController@showCategoris');
+
+Route::resource('ProductStock','ProductStockController');
+Route::post("addmore","ProductStockController@addMorePost");
+Route::get('showProductList','ProductStockController@showProductList');
+Route::get('ProductStockBulk','ProductStockController@indexs');
+Route::get('ProductStockInfo','ProductStockController@indexView');
+Route::get('/get/all/ProductStock','ProductStockController@getAllStockInfo')->name('all.ProductStock');
+
+
+Route::resource('RegulerSell','RegulerSellController');
+Route::post('/autocomplete/fetch', 'RegulerSellController@fetch')->name('autocomplete.fetch');
+Route::get('/get/all/ProductList','RegulerSellController@getAllProductInfoForSell')->name('all.ProductList');

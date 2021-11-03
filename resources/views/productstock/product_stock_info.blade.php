@@ -31,10 +31,10 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="breadcrumb-holder">
-                            <h1 class="main-title float-left">Product Info</h1>
+                            <h1 class="main-title float-left">Product Stock Info</h1>
                             <ol class="breadcrumb float-right">
                                 <li class="breadcrumb-item">Home</li>
-                                <li class="breadcrumb-item active">Product Info</li>
+                                <li class="breadcrumb-item active">Product Stock Info</li>
                             </ol>
                             <div class="clearfix"></div>
                         </div>
@@ -48,10 +48,10 @@
                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-12 col-xl-12">
                         <div class="card mb-3">
                             <div class="card-header">
-                                <h3><i class="fa fa-table"></i> Add Product</h3>
+                                <h3><i class="fa fa-table"></i> Stock info</h3>
                                 <span class="pull-right">
                                     <button class="btn btn-primary btn-sm" onclick="addNewAction()">
-                                    <i class="fa fa-plus-square bigfonts"></i> Add New Product</button>
+                                    <i class="fa fa-plus-square bigfonts"></i> Add New Stock</button>
                                 </span>
                             </div>
 
@@ -61,8 +61,12 @@
                                            cellspacing="0">
                                         <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th>Invoice No</th>
                                             <th>Product Name</th>
+                                            <th>Qty</th>
+                                            <th>Unit Price</th>
+                                            <th>BR Code</th>
+                                            <th>Create By</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -104,17 +108,22 @@
     var table1 = $('#Products-dataTabel').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{!! route('all.ProductInfo') !!}',
+        ajax: '{!! route('all.ProductStock') !!}',
         columns: [
-            {data: 'product_id', name: 'product_id'},
+            {data: 'invice_no', name: 'invice_no'},
             {data: 'product_name', name: 'product_name'},
-            {data: 'product_status', name: 'product_status'},
+            {data: 'qty', name: 'qty'},
+            {data: 'unit_price', name: 'unit_price'},
+            {data: 'product_br_code', name: 'product_br_code'},
+            {data: 'create_info', name: 'create_info'},
+            {data: 'product_stock_status', name: 'product_stock_status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ]
     });
 
+
     function  addNewAction() {
-        window.location.href = 'AddProduct';
+        window.location.href = 'ProductStock';
     }
 </script>
 <!-- END Java Script for this page -->

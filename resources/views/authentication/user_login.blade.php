@@ -60,7 +60,10 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button class="btn btn-primary col-md-12" type="button" onclick="checkLogin()">
+                                    {{--<button class="btn btn-primary col-md-12" type="button" onclick="checkLogin()">
+                                        Login
+                                    </button>--}}
+                                    <button class="btn btn-primary col-md-12" id="myButton" type="button" onclick="checkLogin()">
                                         Login
                                     </button>
                                 </div>
@@ -88,6 +91,16 @@
 <!-- END Java Script for this page -->
 @include('layouts.footer_files')
 <script>
+
+    document.getElementById("user_password")
+        .addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                document.getElementById("myButton").click();
+            }
+        });
+
+
     function startTime() {
         var today = new Date();
         var h = today.getHours();
