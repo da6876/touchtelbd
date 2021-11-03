@@ -76,4 +76,25 @@ class RegulerSellController extends Controller
             return ["o_status_message" => $e->getMessage()];
         }
     }
+
+    public function showProductByBarCode(){
+        $ViewType= request()->input('ViewType');
+
+        if ($ViewType=="BarCode"){
+            $code = request()->input('code');
+
+            try {
+                $productInfo = DB::select("SELECT PI.product_id,sell_price,product_name,product_ime,color
+                                    FROM product_info PI,product_stock PS
+                                    WHERE PI.product_id = PS.product_id
+                                    and PS.product_br_code = '$code'");
+
+                return json_encode($productInfo);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return ["o_status_message" => $e->getMessage()];
+            }
+
+        }
+    }
 }

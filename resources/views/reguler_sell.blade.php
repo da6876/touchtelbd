@@ -80,7 +80,27 @@
                             </div>
 
                             <div class="card-body">
+                                <div class="text-center">
+                                    <h4>Scan QR Code</h4>
+                                    <div id="last-barcode"></div>
+                                    <p>OR</p>
+                                    <div class="row">
+                                        <div class="col-lg-10">
+                                            <div class="form-group">
+                                                <input class="form-control" id="product_barcode" name="bar_code" type="text" placeholder="Enter QR or Product Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <button class="btn btn-outline-info" onclick="checkBarCode()"> Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
                                 <div class="row">
+
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>Customer : </label>
@@ -190,6 +210,7 @@
                         <div class="modal-body">
 
                             <div class="row">
+
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Customer Name</label>
@@ -269,8 +290,84 @@
 
 <!-- END Java Script for this page -->
 @include('layouts.footer_files')
+<script>
+    var barcode = '';
+    var interval;
+    document.addEventListener('keydown', function(evt) {
+        if (interval)
+            clearInterval(interval);
+        if (evt.code == 'Enter') {
+            if (barcode)
+                handleBarcode(barcode);
+            barcode = '';
+            return;
+        }
+        if (evt.key != 'Shift')
+            barcode += evt.key;
+        interval = setInterval(() => barcode = '', 20);
+    });
+
+    function handleBarcode(scanned_barcode) {
+        document.querySelector('#last-barcode').innerHTML = scanned_barcode;
+        searchOrderDetails(scanned_barcode);
+    }
+</script>
 
 <script>
+
+    var ii = 0;
+    function checkBarCode(){
+
+        var product_barcode = $("#product_barcode").val();
+        searchOrderDetails(product_barcode);
+    }
+
+    function searchOrderDetails(product_barcode){
+
+        ii++;
+
+        console.log(ii);
+        var csrf_tokens = document.querySelector('meta[name="csrf-token"]').content;
+        url = "{{ url('ShowProductByBarCode') }}";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {'ViewType': 'BarCode', 'code': product_barcode, "_token": csrf_tokens},
+            datatype: 'JSON',
+            success: function (data) {
+                console.log(data);
+                var resultData = $.parseJSON(data);
+                var bodyData = '';
+                for (var x = 0; x < resultData.length; x++) {
+                    bodyData += "<tr id='row" + ii + "' class='dynamic-added'>"
+                    bodyData += "<td>" +
+                        " Name : " + resultData[x].product_name + "<br>" +
+                        " IME : " + resultData[x].product_ime + "<br>" +
+                        " Color : " + resultData[x].color + "" +
+                        "</td>" +
+                        "<td> <input type='number' name='qnty' id='product_price_" + ii + "'  class='form-control product_price' value='"+resultData[x].sell_price+"' for='"+ii+"' readonly/> </td>" +
+                        "<td> <input type='number' name='qnty' id='quantity_" + ii + "'  class='form-control quantity' value='0'  for='"+ii+"'/> </td>" +
+                        "<td> <input type='number' name='qnty' id='total_cost_" + ii + "'  class='form-control total_cost' value='0.0'  for='"+ii+"' readonly/> </td>" +
+                        "<td> <button type='button' name='remove' id='"+ ii +"' class='btn btn-danger btn_remove'><i class='fa fa-trash-o' aria-hidden='true'></i></button> </td>";
+                    bodyData += "</tr>";
+
+                }
+                $("#productStock").append(bodyData);
+
+            },
+            error: function (data) {
+                console.log(data);
+                swal({
+                    title: "Oops",
+                    text: "Some Thing Is .... !!",
+                    icon: "error",
+                    timer: '1500'
+                });
+            }
+        });
+
+    }
+
     $(document).ready(function () {
 
         $('#customer_name').keyup(function () {
@@ -347,13 +444,13 @@
     }
 
     $(document).on('click', '.btn_remove', function () {
+        alert($(this).attr("id"));
         var button_id = $(this).attr("id");
         $('#row' + button_id + '').remove();
     });
 
     // Add a generic event listener for any change on quantity or price classed inputs
     $("#productStock").on('input', 'input.quantity,input.product_price', function () {
-        alert($(this).attr("for"));
         getTotalCost($(this).attr("for"));
     });
 
@@ -361,7 +458,6 @@
     function getTotalCost(ind) {
         var qty = $('#quantity_' + ind).val();
         var price = $('#product_price_' + ind).val();
-        alert(price);
         var totNumber = (qty * price);
         var tot = totNumber.toFixed(2);
         $('#total_cost_' + ind).val(tot);

@@ -62,4 +62,5 @@ Route::get('/get/all/ProductStock','ProductStockController@getAllStockInfo')->na
 
 Route::resource('RegulerSell','RegulerSellController');
 Route::post('/autocomplete/fetch', 'RegulerSellController@fetch')->name('autocomplete.fetch');
+Route::post('ShowProductByBarCode','RegulerSellController@showProductByBarCode');
 Route::get('/get/all/ProductList','RegulerSellController@getAllProductInfoForSell')->name('all.ProductList');

@@ -57,9 +57,13 @@
                                 <span class="pull-right">
                                 <button class="btn btn-primary btn-sm" id="add">
                                 <i class="fa fa-plus-square bigfonts"></i> Add Row</button>
+                                <button class="btn btn-success btn-sm" onclick="addNewRow()">
+                                <i class="fa fa-plus-square bigfonts"></i> Add Row</button>
                             </span>
                             </div>
                             <div class="card-body" id="stockAddData">
+                                <strong>Last scanned barcode: </strong>
+                                <div id="last-barcode"></div>
                                 <form id="stockAdd" action="#" method="post"
                                       enctype="multipart/form-data">
                                     {{csrf_field()}}
@@ -139,7 +143,25 @@
 <!-- END Java Script for this page -->
 @include('layouts.footer_files')
 
+<script>
+    var barcode = '';
+    var interval;
+    document.addEventListener('keydown', function(evt) {
+        if (interval)
+            clearInterval(interval);
+        if (evt.code == 'Enter') {
+            if (barcode)
+                handleBarcode(barcode);
+            barcode = '';
+            return;
+        }
+        if (evt.key != 'Shift')
+            barcode += evt.key;
+        interval = setInterval(() => barcode = '', 20);
+    });
 
+
+</script>
 <script>
 
     var postURL = "<?php echo url('addmore'); ?>";
@@ -184,8 +206,55 @@
     }
 
     document.getElementById('invice_no').value = makeid();
-
-
+    function handleBarcode(scanned_barcode) {
+        i++;
+        document.querySelector('#last-barcode').innerHTML = scanned_barcode;
+        addNewRow();
+        $('#bar_code'+i).val(scanned_barcode);
+    }
+    function addNewRow(){
+        $('#productStock').append('' +
+            '' +
+            '<tr id="row' + i + '" class="dynamic-added">' +
+            '<td>' +
+            '<select id="product_id" name="product_id[]" class="form-control selectProducts' + i + '">' +
+            "<option value=''>Select Product</option>" +
+            "@foreach($all_Product as $product)" +
+            "<option value='{{ $product->product_id }}'>{{ $product->product_name }}</option>" +
+            "@endforeach>" +
+            '</select>' +
+            '</td>' +
+            '<td>' +
+            '<input name="qnty[]" placeholder="Qnty" type="number" class="form-control name_list" />' +
+            '</td>' +
+            '<td>' +
+            '<input name="unit_price[]" placeholder="Unit Price" type="number" class="form-control name_list" />' +
+            '</td>' +
+            '<td>' +
+            '<input name="sell_price[]" placeholder="Sell Pric" type="number" class="form-control name_list" />' +
+            '</td>' +
+            '<td>' +
+            '<input type="text" name="bar_code[]" id="bar_code'+i+'" placeholder="BAR Cod" class="form-control name_list" />' +
+            '</td>' +
+            '<td>' +
+            '<input type="number" name="ime[]" placeholder="IME" class="form-control name_list" />' +
+            '</td>' +
+            '<td>' +
+            '<input type="text" name="color[]" placeholder="Color" class="form-control name_list" />' +
+            '</td>' +
+            '<td>' +
+            '<select name="product_stock_status[]" id="product_statuss" class="form-control">\n' +
+            '    <option value="S">Select Status</option>\n' +
+            '    <option value="Active">Active</option>\n' +
+            '    <option value="InActive">InActive</option>\n' +
+            '</select>' +
+            '</td>' +
+            '<td>' +
+            '<button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">X</button>' +
+            '</td>' +
+            '</tr>' +
+            '');
+    }
     $('#add').click(function () {
         i++;
         $('#productStock').append('' +

@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57842928-3c40-4ff0-b123-51e9f4384fa7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/ - Copy.env" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductInfoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductInfoController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/authentication/user_login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/authentication/user_login.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/footer_files.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/footer_files.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/header_files.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/header_files.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/left_main_sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/left_main_sidebar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/productconfig/product_info.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/productconfig/product_info.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RegulerSellController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RegulerSellController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/productstock/product_stock_bulk.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/productstock/product_stock_bulk.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/reguler_sell.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/reguler_sell.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,8 +27,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="63" column="57" selection-start-line="63" selection-start-column="57" selection-end-line="63" selection-end-column="57" />
+            <state relative-caret-position="697">
+              <caret line="64" column="78" selection-start-line="64" selection-start-column="58" selection-end-line="64" selection-end-column="78" />
             </state>
           </provider>
         </entry>
@@ -37,15 +36,25 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/reguler_sell.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="324" column="22" selection-start-line="324" selection-start-column="22" selection-end-line="324" selection-end-column="22" />
+            <state relative-caret-position="469">
+              <caret line="94" column="83" selection-start-line="94" selection-start-column="83" selection-end-line="94" selection-end-column="83" />
               <folding>
+                <element signature="n#div#0;n#div#1;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#1;n#div#1;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#2;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#form#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
                 <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
-                <element signature="e#9435#10397#0#HTML" />
-                <element signature="e#10472#10771#0#HTML" />
-                <element signature="e#11214#11301#0#HTML" />
-                <element signature="e#11328#11423#0#HTML" />
-                <element signature="e#11458#12696#0#HTML" />
+                <element signature="e#13532#15344#0#HTML" />
+                <element signature="e#12736#13326#0#HTML" />
+                <element signature="e#13688#13725#0#HTML" />
+                <element signature="e#13780#14018#0#HTML" />
+                <element signature="e#14094#15182#0#HTML" />
+                <element signature="e#15239#15335#0#HTML" />
+                <element signature="e#15511#15597#0#HTML" />
+                <element signature="e#15692#15943#0#HTML" />
+                <element signature="e#15972#16059#0#HTML" />
+                <element signature="e#16086#16181#0#HTML" />
+                <element signature="e#16216#17454#0#HTML" />
               </folding>
             </state>
           </provider>
@@ -54,10 +63,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RegulerSellController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="46" column="219" selection-start-line="46" selection-start-column="219" selection-end-line="46" selection-end-column="219" />
+            <state relative-caret-position="579">
+              <caret line="86" column="74" selection-start-line="86" selection-start-column="64" selection-end-line="86" selection-end-column="74" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
+                <element signature="e#1752#2923#0#PHP" />
                 <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
               </folding>
             </state>
@@ -65,19 +75,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/customer/cutomer_info.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="381">
-              <caret line="54" column="55" selection-start-line="54" selection-start-column="45" selection-end-line="54" selection-end-column="55" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/productstock/product_stock.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="161" column="38" lean-forward="true" selection-start-line="161" selection-start-column="38" selection-end-line="166" selection-end-column="38" />
+            <state relative-caret-position="516">
+              <caret line="162" column="87" selection-start-line="162" selection-start-column="57" selection-end-line="162" selection-end-column="87" />
             </state>
           </provider>
         </entry>
@@ -86,7 +87,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>user_type_id</find>
       <find>sub_cat</find>
       <find>UserLogin</find>
       <find>pro-profile.html</find>
@@ -116,6 +116,7 @@
       <find>productStock</find>
       <find>btn_remove</find>
       <find>i++;</find>
+      <find>row</find>
     </findStrings>
     <replaceStrings>
       <replace>product_type</replace>
@@ -152,13 +153,13 @@
         <option value="$PROJECT_DIR$/resources/views/layouts/header_files.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/productstock/product_stock.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ProductStockController.php" />
-        <option value="$PROJECT_DIR$/resources/views/productstock/product_stock_bulk.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/footer_files.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/CustomerController.php" />
         <option value="$PROJECT_DIR$/resources/views/customer/cutomer_info.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/left_main_sidebar.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/resources/views/productconfig/category.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/productstock/product_stock_bulk.blade.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/RegulerSellController.php" />
         <option value="$PROJECT_DIR$/resources/views/reguler_sell.blade.php" />
       </list>
@@ -313,6 +314,20 @@
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="customer" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="touchtelbd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="touchtelbd" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="productconfig" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="touchtelbd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="touchtelbd" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="productstock" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -324,7 +339,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -379,11 +394,12 @@
       <workItem from="1635830223734" duration="2166000" />
       <workItem from="1635845484788" duration="16476000" />
       <workItem from="1635924749637" duration="9803000" />
+      <workItem from="1635950749877" duration="8089000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77191000" />
+    <option name="totallyTimeSpent" value="85280000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -395,10 +411,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28517398" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.289644" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -411,7 +427,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.3502455" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.34948096" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.3289689" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -426,13 +442,7 @@
     <entry file="file://$PROJECT_DIR$/public/assets/js/detect.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/.env" />
     <entry file="file://$PROJECT_DIR$/resources/views/errorpage/database_error.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -624,73 +634,97 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/productconfig/product_add.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/customer/cutomer_info.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="173" column="28" selection-start-line="173" selection-start-column="16" selection-end-line="173" selection-end-column="28" />
+        <state relative-caret-position="918">
+          <caret line="54" column="55" selection-start-line="54" selection-start-column="45" selection-end-line="54" selection-end-column="55" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/productconfig/category.blade.php">
+    <entry file="file://$PROJECT_DIR$/soc_touchtelbd.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="78" column="81" selection-start-line="78" selection-start-column="71" selection-end-line="78" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="63" column="57" selection-start-line="63" selection-start-column="57" selection-end-line="63" selection-end-column="57" />
+        <state relative-caret-position="-799">
+          <caret line="16" column="65" lean-forward="true" selection-start-line="16" selection-start-column="65" selection-end-line="16" selection-end-column="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/productstock/product_stock_bulk.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1009">
-          <caret line="263" column="40" selection-start-line="263" selection-start-column="30" selection-end-line="263" selection-end-column="40" />
+        <state relative-caret-position="340">
+          <caret line="213" selection-start-line="213" selection-end-line="213" />
           <folding>
+            <element signature="e#5163#6087#0#HTML" />
+            <element signature="e#6113#6346#0#HTML" />
             <element signature="e#8483#9343#0#HTML" />
+            <element signature="e#9402#9498#0#HTML" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/productconfig/category.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="221" column="16" lean-forward="true" selection-start-line="221" selection-start-column="16" selection-end-line="221" selection-end-column="67" />
+          <folding>
+            <element signature="e#6968#8208#0#HTML" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="64" column="78" selection-start-line="64" selection-start-column="58" selection-end-line="64" selection-end-column="78" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RegulerSellController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="46" column="219" selection-start-line="46" selection-start-column="219" selection-end-line="46" selection-end-column="219" />
+        <state relative-caret-position="579">
+          <caret line="86" column="74" selection-start-line="86" selection-start-column="64" selection-end-line="86" selection-end-column="74" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
+            <element signature="e#1752#2923#0#PHP" />
             <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/customer/cutomer_info.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/productconfig/product_add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="54" column="55" selection-start-line="54" selection-start-column="45" selection-end-line="54" selection-end-column="55" />
+        <state relative-caret-position="1212">
+          <caret line="173" column="28" selection-start-line="173" selection-start-column="16" selection-end-line="173" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/productstock/product_stock.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="161" column="38" lean-forward="true" selection-start-line="161" selection-start-column="38" selection-end-line="166" selection-end-column="38" />
+        <state relative-caret-position="516">
+          <caret line="162" column="87" selection-start-line="162" selection-start-column="57" selection-end-line="162" selection-end-column="87" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/reguler_sell.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="324" column="22" selection-start-line="324" selection-start-column="22" selection-end-line="324" selection-end-column="22" />
+        <state relative-caret-position="469">
+          <caret line="94" column="83" selection-start-line="94" selection-start-column="83" selection-end-line="94" selection-end-column="83" />
           <folding>
+            <element signature="n#div#0;n#div#1;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#1;n#div#1;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#2;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#form#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
             <element signature="n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="e#9435#10397#0#HTML" />
-            <element signature="e#10472#10771#0#HTML" />
-            <element signature="e#11214#11301#0#HTML" />
-            <element signature="e#11328#11423#0#HTML" />
-            <element signature="e#11458#12696#0#HTML" />
+            <element signature="e#13532#15344#0#HTML" />
+            <element signature="e#12736#13326#0#HTML" />
+            <element signature="e#13688#13725#0#HTML" />
+            <element signature="e#13780#14018#0#HTML" />
+            <element signature="e#14094#15182#0#HTML" />
+            <element signature="e#15239#15335#0#HTML" />
+            <element signature="e#15511#15597#0#HTML" />
+            <element signature="e#15692#15943#0#HTML" />
+            <element signature="e#15972#16059#0#HTML" />
+            <element signature="e#16086#16181#0#HTML" />
+            <element signature="e#16216#17454#0#HTML" />
           </folding>
         </state>
       </provider>
