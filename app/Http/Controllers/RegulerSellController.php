@@ -32,12 +32,25 @@ class RegulerSellController extends Controller
         }
     }
 
+    public function indexs()
+    {
+        $this->AuthCheck();
+
+        try {
+            DB::connection()->getPdo();
+            return view('report.cash_memo');
+        } catch (\Exception $e) {
+            return view('errorpage.database_error');
+        }
+    }
+
     public function getAllProductInfoForSell()
     {
 
         $categories = DB::select("SELECT PI.product_id,CONCAT( product_name,' - InVoice : ',invice_no,' - Price : ',sell_price)  AS name,sell_price,product_name,product_ime,color
                                     FROM product_info PI,product_stock PS
                                     WHERE PI.product_id = PS.product_id
+                                    and PS.qty >0
                                     ORDER BY PI.product_id");
 
         return DataTables::of($categories)
@@ -84,10 +97,11 @@ class RegulerSellController extends Controller
             $code = request()->input('code');
 
             try {
-                $productInfo = DB::select("SELECT PI.product_id,sell_price,product_name,product_ime,color
+                $productInfo = DB::select("SELECT product_stock_id,PI.product_id,sell_price,product_name,product_ime,color
                                     FROM product_info PI,product_stock PS
                                     WHERE PI.product_id = PS.product_id
-                                    and PS.product_br_code = '$code'");
+                                    and PS.product_br_code = '$code'
+                                    and PS.qty >0");
 
                 return json_encode($productInfo);
             } catch (\Exception $e) {
@@ -95,6 +109,61 @@ class RegulerSellController extends Controller
                 return ["o_status_message" => $e->getMessage()];
             }
 
+        }
+    }
+
+    public function saveOrderData(Request $request)
+    {
+        try {
+            $invoice_no = "333ggt55f";
+            $customer_id = $request['customer_id'];
+            $product_id = $request['product_id'];
+            $product_price = $request['product_price'];
+            $qnty = $request['quantity'];
+            $total_cost = $request['total_cost'];
+            $DeuAmount = $request['DeuAmount'];
+            $ReceiveAmount = $request['ReceiveAmount'];
+            $GrandTotal = $request['GrandTotal'];
+            $product_order_status = "Success";
+
+            $data = array();
+            for ($x = 0; $x < count($product_id); $x++) {
+
+                $data['invoice_no'] = $invoice_no;
+                $data['product_stock_id'] = $product_id[$x];
+                $data['customer_info_id'] = $request['customer_id'];
+                $data['qty'] = $qnty[$x];
+                $data['sell_price'] = $total_cost[$x];
+                $data['discount_price'] = "0.0";
+                $data['payment_type'] = "Cash";
+                $data['product_order_status'] = $product_order_status;
+                $data['create_by'] = Session::get('user_info_id');
+                $data['update_by'] = "N";
+                $data['deu_amount'] = $request['DeuAmount'];
+                $data['recive_amount'] = $request['ReceiveAmount'];
+                $data['grand_total'] = $request['GrandTotal'];
+
+                $result = DB::table('product_order')->insert($data);
+
+                $data1 = array();
+                $data1['qty'] = "0";
+
+                DB::table('product_stock')
+                    ->where('product_stock_id', $product_id[$x])
+                    ->update($data1);
+            }
+
+
+            return json_encode(array(
+                "statusCode" => 200,
+                "statusMsg" => "Order Place Successfully"
+            ));
+
+
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ["o_status_message" => $e->getMessage()];
         }
     }
 }

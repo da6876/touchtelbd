@@ -87,12 +87,14 @@
                                     <div class="row">
                                         <div class="col-lg-10">
                                             <div class="form-group">
-                                                <input class="form-control" id="product_barcode" name="bar_code" type="text" placeholder="Enter QR or Product Name">
+                                                <input class="form-control" id="product_barcode" name="bar_code"
+                                                       type="text" placeholder="Enter QR or Product Name">
                                             </div>
                                         </div>
                                         <div class="col-lg-2">
                                             <div class="form-group">
-                                                <button class="btn btn-outline-info" onclick="checkBarCode()"> Search</button>
+                                                <button class="btn btn-outline-info" onclick="checkBarCode()"> Search
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -130,16 +132,18 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <form id="selladd" action="#" method="post"
+                                <form id="orderConfirm" action="#" method="post"
                                       enctype="multipart/form-data">
-                                    <input type="hidden" id="customer_id">
+                                    {{csrf_field()}}
+                                    <input type="hidden" id="customer_id" name="customer_id">
+
                                     <table class="table table-bordered" id="productStock">
                                         <thead>
                                         <tr>
-                                            <th class="col-md-6">Name</th>
-                                            <th class="col-md-2">Price</th>
-                                            <th class="col-md-2">Quantity</th>
-                                            <th class="col-md-2">Sub Total</th>
+                                            <th class="col-md-5">Name</th>
+                                            <th class="col-md-3">Price</th>
+                                            <th class="col-md-1">Quantity</th>
+                                            <th class="col-md-3">Sub Total</th>
                                             <th>SAA</th>
                                         </tr>
                                         </thead>
@@ -151,28 +155,30 @@
 
                                             <td class="col-md-6" colspan="3"><b>Grand Total</b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control" id="subqnty" type="text" readonly>
+                                                <input class="form-control" name="GrandTotal" id="GrandTotal" type="text" readonly>
                                             </td>
                                         </tr>
                                         <tr>
 
                                             <td class="col-md-6" colspan="3"><b>Receive Amount </b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control" id="subqnty" type="number">
+                                                <input class="form-control AmountReceive" name="ReceiveAmount" id="ReceiveAmount"
+                                                       type="number">
                                             </td>
                                         </tr>
                                         <tr>
 
                                             <td class="col-md-6" colspan="3"><b>Deu Amount </b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control" id="subqnty" type="number" readonly>
+                                                <input class="form-control" name="DeuAmount" id="DeuAmount" type="number" readonly>
                                             </td>
                                         </tr>
 
                                         </tfoot>
                                     </table>
 
-                                    <button type="button" onclick="addProductStock()" class="btn btn-info col-md-3 pull-right">
+                                    <button type="button" onclick="confrimOrder()"
+                                            class="btn btn-info col-md-3 pull-right">
                                         Confirm Order
                                     </button>
                                 </form>
@@ -293,7 +299,7 @@
 <script>
     var barcode = '';
     var interval;
-    document.addEventListener('keydown', function(evt) {
+    document.addEventListener('keydown', function (evt) {
         if (interval)
             clearInterval(interval);
         if (evt.code == 'Enter') {
@@ -316,17 +322,16 @@
 <script>
 
     var ii = 0;
-    function checkBarCode(){
+
+    function checkBarCode() {
 
         var product_barcode = $("#product_barcode").val();
         searchOrderDetails(product_barcode);
     }
 
-    function searchOrderDetails(product_barcode){
+    function searchOrderDetails(product_barcode) {
 
         ii++;
-
-        console.log(ii);
         var csrf_tokens = document.querySelector('meta[name="csrf-token"]').content;
         url = "{{ url('ShowProductByBarCode') }}";
         $.ajax({
@@ -336,23 +341,39 @@
             datatype: 'JSON',
             success: function (data) {
                 console.log(data);
-                var resultData = $.parseJSON(data);
-                var bodyData = '';
-                for (var x = 0; x < resultData.length; x++) {
-                    bodyData += "<tr id='row" + ii + "' class='dynamic-added'>"
-                    bodyData += "<td>" +
-                        " Name : " + resultData[x].product_name + "<br>" +
-                        " IME : " + resultData[x].product_ime + "<br>" +
-                        " Color : " + resultData[x].color + "" +
-                        "</td>" +
-                        "<td> <input type='number' name='qnty' id='product_price_" + ii + "'  class='form-control product_price' value='"+resultData[x].sell_price+"' for='"+ii+"' readonly/> </td>" +
-                        "<td> <input type='number' name='qnty' id='quantity_" + ii + "'  class='form-control quantity' value='0'  for='"+ii+"'/> </td>" +
-                        "<td> <input type='number' name='qnty' id='total_cost_" + ii + "'  class='form-control total_cost' value='0.0'  for='"+ii+"' readonly/> </td>" +
-                        "<td> <button type='button' name='remove' id='"+ ii +"' class='btn btn-danger btn_remove'><i class='fa fa-trash-o' aria-hidden='true'></i></button> </td>";
-                    bodyData += "</tr>";
+                if (data!='[]') {
+                    var resultData = $.parseJSON(data);
+                    var bodyData = '';
 
+                    for (var x = 0; x < resultData.length; x++) {
+                        bodyData += "<tr id='row" + ii + "' class='dynamic-added'>"
+                        bodyData += "<td>" +
+                            " Name : " + resultData[x].product_name + "<br>" +
+                            " IME : " + resultData[x].product_ime + "<br>" +
+                            " Color : " + resultData[x].color + "" +
+                            "</td>" +
+                            "<td> " +
+                            "<input type='hidden' name='product_id[]' id='product_id_" + ii + "'  class='form-control product_id' value='" + resultData[x].product_stock_id + "' for='" + ii + "'/> " +
+                            "<input type='number' name='product_price[]' id='product_price_" + ii + "'  class='form-control product_price' value='" + resultData[x].sell_price + "' for='" + ii + "' readonly/> " +
+                            "</td>" +
+                            "<td> <input type='number' min='0' name='quantity[]' id='quantity_" + ii + "'  class='form-control quantity' value='0'  for='" + ii + "'/> </td>" +
+                            "<td> <input type='number' name='total_cost[]' id='total_cost_" + ii + "'  class='form-control total_cost' value='0.0'  for='" + ii + "' readonly/> </td>" +
+                            "<td> <button type='button' name='remove' id='" + ii + "' class='btn btn-danger btn_remove'><i class='fa fa-trash-o' aria-hidden='true'></i></button> </td>";
+                        bodyData += "</tr>";
+
+                    }
+                    if (resultData.length != 0) {
+                        $('.noItemHere').hide();
+                        $("#productStock").append(bodyData);
+                    }
+                }else {
+                    swal({
+                        title: "Oops!! Sorry ",
+                        text: "No Product Found !!",
+                        timer: '2500'
+                    });
                 }
-                $("#productStock").append(bodyData);
+
 
             },
             error: function (data) {
@@ -386,10 +407,11 @@
             }
         });
     });
+
 </script>
 
 <script>
-
+    var grandTotal = 0.0;
     var table1 = $('#ProductsdataTabel').DataTable({
         "processing": true,
         "serverSide": true,
@@ -427,13 +449,13 @@
             '<label>' + name + '<br> IME : ' + ime + '<br>Color : ' + color + '</label>' +
             '</td>' +
             '<td>' +
-            '<input name="qnty" id="product_price_' + i + '"  class="form-control product_price" value="' + price + '" for="' + i + '" readonly/>' +
+            '<input name="product_price[]" id="product_price_' + i + '"  class="form-control product_price" value="' + price + '" for="' + i + '" readonly/>' +
             '</td>' +
             '<td>' +
-            '<input name="qnty" id="quantity_' + i + '" type="number" class="form-control quantity" value="0" for="' + i + '"/>' +
+            '<input name="qnty[]" id="quantity_' + i + '" type="number" class="form-control quantity" value="0" for="' + i + '"/>' +
             '</td>' +
             '<td>' +
-            '<input name="qnty" id="total_cost_' + i + '"  class="form-control total_cost" value="0.0" for="' + i + '" readonly/>' +
+            '<input name="total_cost[]" id="total_cost_' + i + '"  class="form-control total_cost" value="0.0" for="' + i + '" readonly/>' +
             '</td>' +
             '<td>' +
             '<button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove"><i class="fa fa-trash-o" aria-hidden="true" ></i></button>' +
@@ -447,11 +469,27 @@
         alert($(this).attr("id"));
         var button_id = $(this).attr("id");
         $('#row' + button_id + '').remove();
+        calculateSubTotal();
     });
 
-    // Add a generic event listener for any change on quantity or price classed inputs
-    $("#productStock").on('input', 'input.quantity,input.product_price', function () {
+    $("#productStock").on('input', 'input.quantity', function () {
         getTotalCost($(this).attr("for"));
+    });
+
+    $("#productStock").on('input', 'input.AmountReceive', function () {
+        var TotalPrice = $('#GrandTotal').val();
+        var GivenMoney = $('#ReceiveAmount').val();
+        if (TotalPrice != "" && GivenMoney != "") {
+            var DueAmount = TotalPrice - GivenMoney;
+            $('#DeuAmount').val(DueAmount.toFixed(2));
+        } else {
+            swal({
+                title: "Oops",
+                text: "Please Add A Product And Enter The Given Money",
+                timer: '2500'
+            });
+            $('#ReceiveAmount').val('0.0')
+        }
     });
 
     // Using a new index rather than your global variable i
@@ -461,13 +499,65 @@
         var totNumber = (qty * price);
         var tot = totNumber.toFixed(2);
         $('#total_cost_' + ind).val(tot);
+        calculateSubTotal();
     }
 
-    function addCustomer() {
-        alert("aaa");
+    function calculateSubTotal() {
+        var subtotal = 0;
+        $('.total_cost').each(function () {
+            subtotal += parseFloat($(this).val());
+        });
+        $('#GrandTotal').val(subtotal.toFixed(2));
+    }
 
-        $('#countryList').fadeOut()
-        clearfrom();
+    var postURL = "<?php echo url('PlaceOrder'); ?>";
+
+    function confrimOrder() {
+        var customer_name = $('#customer_name').val();
+        var customer_id = $('#customer_id').val();
+        var ReceiveAmount = $('#ReceiveAmount').val();
+        if (customer_id != "" && customer_name != "") {
+            if (ReceiveAmount != "") {
+                $.ajax({
+                    url:postURL,
+                    method:"POST",
+                    data:$('#orderConfirm').serialize(),
+                    type:'json',
+                    success:function(data)
+                    {
+                        console.log(data);
+                        var dataResult = JSON.parse(data);
+                        if (dataResult.statusCode == 200) {
+
+                            $('.dynamic-added').remove();
+                            $('#orderConfirm')[0].reset();
+                            swal("Success", dataResult.statusMsg);
+
+                            document.getElementById('invice_no').value = makeid();
+                        }else  {
+                            swal({
+                                title: "Oops",
+                                text: "Bulk Data Insert Failed",
+                                icon: "error",
+                                timer: '1500'
+                            });
+                        }
+                    }
+                });
+            } else {
+                swal({
+                    title: "Oops",
+                    text: "Please Enter The Receive Amount !!",
+                    timer: '2500'
+                });
+            }
+        } else {
+            swal({
+                title: "Oops",
+                text: "Please Select A Customer",
+                timer: '2500'
+            });
+        }
     }
 
     function clearfrom() {
@@ -512,6 +602,7 @@
 
 
     };
+
 </script>
 </body>
 </html>
