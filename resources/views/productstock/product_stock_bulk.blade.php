@@ -24,6 +24,11 @@
 <!-- End Sidebar -->
 
 
+    @php
+        $all_Product1 = DB::table('product_info')
+            ->where('product_status', 'Active')
+            ->get();
+    @endphp
     <div class="content-page">
 
         <!-- Start content -->
@@ -51,74 +56,104 @@
 
                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-12 col-xl-12">
                         <div class="card mb-3">
-
                             <div class="card-header">
-                                <h3><i class="fa fa-table"></i> Bulk Add Stock</h3>
-                                <span class="pull-right">
-                                <button class="btn btn-primary btn-sm" id="add">
-                                <i class="fa fa-plus-square bigfonts"></i> Add Row</button>
-                                <button class="btn btn-success btn-sm" onclick="addNewRow()">
-                                <i class="fa fa-plus-square bigfonts"></i> Add Row</button>
-                            </span>
+                                <h3><i class="fa fa-table"></i> Add Stock Info</h3>
+
+                                </span>
                             </div>
-                            <div class="card-body" id="stockAddData">
-                                <strong>Last scanned barcode: </strong>
-                                <div id="last-barcode"></div>
-                                <form id="stockAdd" action="#" method="post"
-                                      enctype="multipart/form-data">
+                            <div class="card-body" id="stockAddDataDtl">
+                                <form id="stockAddMstData" action="#" method="post" enctype="multipart/form-data">
                                     {{csrf_field()}}
-                                    <div class="modal-body">
 
-                                        @php
-                                            $all_Product = DB::table('product_info')
-                                                ->where('product_status', 'Active')
-                                                ->get();
-                                        @endphp
+                                    <input type="hidden" name="primaraynumber" id="primaraynumber">
 
-                                        <div class="row">
-
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label>Invoice No</label>
-                                                    <input class="form-control" id="invice_no" name="invice_no"
-                                                           type="text">
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Invoice No</label>
+                                                <input class="form-control" id="invice_no" name="invice_no" type="text">
                                             </div>
-
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Products</label>
+                                                <select name="product_id" id="product_id" class="form-control" required>
+                                                </select>
+                                            </div>
                                         </div>
 
-                                        <table class="table table-bordered" id="productStock" width="100%"
-                                               cellspacing="0">
-                                            <thead>
-                                            <tr>
-                                                <th>Product Name</th>
-                                                <th>Qty</th>
-                                                <th>Unit Price</th>
-                                                <th>Sell Price</th>
-                                                <th>BR Code</th>
-                                                <th>IME</th>
-                                                <th>Color</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Qnty</label>
+                                                <input class="form-control" id="qnty" name="qnty" type="number">
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                            </tbody>
-                                        </table>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Company</label>
+                                                <select name="company_id" id="company_id" class="form-control" required>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Short Info</label>
+                                                <input class="form-control" name="shot_decs" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <select name="product_stock_status" id="product_status"
+                                                        class="form-control">
+                                                    <option value="S">Select Status</option>
+                                                    <option value="Active">Active</option>
+                                                    <option value="InActive">InActive</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
                                     </div>
+
+                                    <span class="pull-right">
+                                        <button class="btn btn-success btn-sm" type="button"
+                                                onclick="addstockMasterData()">
+                                        <i class="fa fa-plus-square bigfonts"></i>Add Row
+                                        </button>
+                                    </span>
+                                    <hr>
+
+                                    <table class="table table-bordered" id="productStockMst" width="100%"
+                                           cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            <th>Color</th>
+                                            <th>Unit Price</th>
+                                            <th>Sell Price</th>
+                                            <th>BRCode</th>
+                                            <th>IMEI</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+
                                     <div class="modal-footer  d-flex justify-content-center">
-                                        <button type="button" id="submit"
-                                                class="btn btn-primary col-md-12">
-                                            Add To Sock
+                                        <button type="button"
+                                                class="btn btn-info btn-outline-info col-md-6" onclick="savestockMasterData()">
+                                            Save Stock Details
                                         </button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-
 
                 </div>
 
@@ -144,30 +179,18 @@
 @include('layouts.footer_files')
 
 <script>
-    var barcode = '';
-    var interval;
-    document.addEventListener('keydown', function(evt) {
-        if (interval)
-            clearInterval(interval);
-        if (evt.code == 'Enter') {
-            if (barcode)
-                handleBarcode(barcode);
-            barcode = '';
-            return;
-        }
-        if (evt.key != 'Shift')
-            barcode += evt.key;
-        interval = setInterval(() => barcode = '', 20);
-    });
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (var i = 0; i < 20; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+    }
 
-
-</script>
-<script>
-
-    var postURL = "<?php echo url('addmore'); ?>";
+    document.getElementById('invice_no').value = makeid();
+    document.getElementById('primaraynumber').value = makeid();
 
     url = "{{ url('showProductList') }}";
-
     $.ajax({
         url: url,
         type: 'GET',
@@ -197,128 +220,135 @@
         }
     });
 
-    function makeid() {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        for (var i = 0; i < 20; i++)
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        return text;
-    }
+    url1 = "{{ url('showCompanyList') }}";
+    $.ajax({
+        url: url1,
+        type: 'GET',
+        datatype: 'JSON',
+        success: function (data) {
+            var product_type = $.parseJSON(data);
+            if (product_type != '') {
+                var markup = "<option value=''>Select Company</option>";
+                for (var x = 0; x < product_type.length; x++) {
+                    markup += "<option value=" + product_type[x].company_id + ">" + product_type[x].company_name + "</option>";
+                }
+                $("#company_id").html(markup).show();
+            } else {
+                var markup = "<option value=''>Select Company</option>";
+                $("#company_id").html(markup).show();
+            }
 
-    document.getElementById('invice_no').value = makeid();
-    function handleBarcode(scanned_barcode) {
-        i++;
-        document.querySelector('#last-barcode').innerHTML = scanned_barcode;
-        addNewRow();
-        $('#bar_code'+i).val(scanned_barcode);
-    }
-    function addNewRow(){
-        $('#productStock').append('' +
-            '' +
-            '<tr id="row' + i + '" class="dynamic-added">' +
-            '<td>' +
-            '<select id="product_id" name="product_id[]" class="form-control selectProducts' + i + '">' +
-            "<option value=''>Select Product</option>" +
-            "@foreach($all_Product as $product)" +
-            "<option value='{{ $product->product_id }}'>{{ $product->product_name }}</option>" +
-            "@endforeach>" +
-            '</select>' +
-            '</td>' +
-            '<td>' +
-            '<input name="qnty[]" placeholder="Qnty" type="number" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input name="unit_price[]" placeholder="Unit Price" type="number" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input name="sell_price[]" placeholder="Sell Pric" type="number" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input type="text" name="bar_code[]" id="bar_code'+i+'" placeholder="BAR Cod" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input type="number" name="ime[]" placeholder="IME" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input type="text" name="color[]" placeholder="Color" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<select name="product_stock_status[]" id="product_statuss" class="form-control">\n' +
-            '    <option value="S">Select Status</option>\n' +
-            '    <option value="Active">Active</option>\n' +
-            '    <option value="InActive">InActive</option>\n' +
-            '</select>' +
-            '</td>' +
-            '<td>' +
-            '<button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">X</button>' +
-            '</td>' +
-            '</tr>' +
-            '');
-    }
-    $('#add').click(function () {
-        i++;
-        $('#productStock').append('' +
-            '' +
-            '<tr id="row' + i + '" class="dynamic-added">' +
-            '<td>' +
-            '<select id="product_id" name="product_id[]" class="form-control selectProducts' + i + '">' +
-            "<option value=''>Select Product</option>" +
-            "@foreach($all_Product as $product)" +
-            "<option value='{{ $product->product_id }}'>{{ $product->product_name }}</option>" +
-            "@endforeach>" +
-            '</select>' +
-            '</td>' +
-            '<td>' +
-            '<input name="qnty[]" placeholder="Qnty" type="number" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input name="unit_price[]" placeholder="Unit Price" type="number" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input name="sell_price[]" placeholder="Sell Pric" type="number" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input type="text" name="bar_code[]" placeholder="BAR Cod" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input type="number" name="ime[]" placeholder="IME" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<input type="text" name="color[]" placeholder="Color" class="form-control name_list" />' +
-            '</td>' +
-            '<td>' +
-            '<select name="product_stock_status[]" id="product_statuss" class="form-control">\n' +
-            '    <option value="S">Select Status</option>\n' +
-            '    <option value="Active">Active</option>\n' +
-            '    <option value="InActive">InActive</option>\n' +
-            '</select>' +
-            '</td>' +
-            '<td>' +
-            '<button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">X</button>' +
-            '</td>' +
-            '</tr>' +
-            '');
+
+        },
+        error: function (data) {
+            swal({
+                title: "Oops",
+                text: "Some Thing Is .... !!",
+                icon: "error",
+                timer: '1500'
+            });
+        }
     });
 
-    $('#submit').click(function(){
+    var mainInfoI = 0;
 
+    function addDetailsStockInfo() {
+
+        mainInfoI++;
+        $('#productStockMst').append('' +
+            '' +
+            '<tr id="row' + mainInfoI + '" class="dynamic-added-mst">' +
+            '<td>' +
+            '<input name="color[]" placeholder="Color" type="text" class="form-control color" />' +
+            '</td>' +
+            '<td>' +
+            '<input name="unit_price[]" placeholder="Unit Price" type="number" class="form-control unit_price" />' +
+            '</td>' +
+            '<td>' +
+            '<input name="sell_price[]" placeholder="Sell Price" type="number" class="form-control sell_price" />' +
+            '</td>' +
+            '<td>' +
+            '<input type="text" name="product_brcode[]" placeholder="BRCode Decs" class="form-control product_brcode" />' +
+            '</td>' +
+            '<td>' +
+            '<input type="text" name="product_imei[]" placeholder="IMEI" class="form-control product_imei" />' +
+            '</td>' +
+            '<td>' +
+            '<button type="button" name="remove" onclick="removeRow()" id="' + mainInfoI + '" class="btn btn-danger btn_remove">X</button>' +
+            '</td>' +
+            '</tr>' +
+            '');
+    }
+
+    function addstockMasterData() {
+        var invice_no = $('#invice_no').val();
+        var product_id = $('#product_id').val();
+        var qnty = $('#qnty').val();
+        var company_id = $('#company_id').val();
+        var product_status = $('#product_status').val();
+
+        if (invice_no != "") {
+            if (product_id != "") {
+                if (qnty != "") {
+                    if (company_id != "") {
+                        if (product_status != "") {
+                            addDetailsStockInfo();
+                        } else {
+                            swal({
+                                text: "Select Product Stock Status",
+                                timer: '2500'
+                            });
+                        }
+                    } else {
+                        swal({
+                            text: "Select Company",
+                            timer: '2500'
+                        });
+                    }
+                } else {
+                    swal({
+                        text: "Enter Qty",
+                        timer: '2500'
+                    });
+                }
+            } else {
+                swal({
+                    text: "Select Product",
+                    timer: '2500'
+                });
+            }
+        } else {
+            swal({
+                text: "Enter Invoice NO",
+                timer: '2500'
+            });
+        }
+
+    }
+
+    function removeRow() {
+        var button_id = $(this).attr("id");
+        $('#row' + button_id + '').remove();
+    }
+
+    function savestockMasterData() {
+        urlSave = "{{ url('saveStockMasterData') }}";
         $.ajax({
-            url:postURL,
-            method:"POST",
-            data:$('#stockAdd').serialize(),
-            type:'json',
-            success:function(data)
-            {
+            url: urlSave,
+            method: "POST",
+            data: $('#stockAddMstData').serialize(),
+            type: 'json',
+            success: function (data) {
                 console.log(data);
                 var dataResult = JSON.parse(data);
                 if (dataResult.statusCode == 200) {
 
-                    $('.dynamic-added').remove();
-                    $('#stockAdd')[0].reset();
+                    $('.dynamic-added-mst').remove();
+                    $('#stockAddMstData')[0].reset();
                     swal("Success", dataResult.statusMsg);
 
                     document.getElementById('invice_no').value = makeid();
-                }else  {
+                } else {
                     swal({
                         title: "Oops",
                         text: "Bulk Data Insert Failed",
@@ -328,12 +358,32 @@
                 }
             }
         });
-    });
+    }
 
-    $(document).on('click', '.btn_remove', function () {
-        var button_id = $(this).attr("id");
-        $('#row' + button_id + '').remove();
+</script>
+
+<script>
+    var barcode = '';
+    var interval;
+    document.addEventListener('keydown', function (evt) {
+        if (interval)
+            clearInterval(interval);
+        if (evt.code == 'Enter') {
+            if (barcode)
+                handleBarcode(barcode);
+            barcode = '';
+            return;
+        }
+        if (evt.key != 'Shift')
+            barcode += evt.key;
+        interval = setInterval(() => barcode = '', 20);
     });
+    function handleBarcode(scanned_barcode) {
+        i++;
+        document.querySelector('#last-barcode').innerHTML = scanned_barcode;
+        addNewRow();
+        $('#bar_code' + i).val(scanned_barcode);
+    }
 
 </script>
 

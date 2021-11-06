@@ -53,8 +53,10 @@ Route::get('getProductType','ProductInfoController@showProductType');
 Route::get('getCategories','ProductInfoController@showCategoris');
 
 Route::resource('ProductStock','ProductStockController');
+Route::post("saveStockMasterData","ProductStockController@addStockMST");
 Route::post("addmore","ProductStockController@addMorePost");
 Route::get('showProductList','ProductStockController@showProductList');
+Route::get('showCompanyList','ProductStockController@showCompanyList');
 Route::get('ProductStockBulk','ProductStockController@indexs');
 Route::get('ProductStockInfo','ProductStockController@indexView');
 Route::get('/get/all/ProductStock','ProductStockController@getAllStockInfo')->name('all.ProductStock');

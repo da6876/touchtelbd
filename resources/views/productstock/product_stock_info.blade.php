@@ -63,9 +63,8 @@
                                         <tr>
                                             <th>Invoice No</th>
                                             <th>Product Name</th>
+                                            <th>Company Name</th>
                                             <th>Qty</th>
-                                            <th>Unit Price</th>
-                                            <th>BR Code</th>
                                             <th>Create By</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -112,9 +111,8 @@
         columns: [
             {data: 'invice_no', name: 'invice_no'},
             {data: 'product_name', name: 'product_name'},
+            {data: 'company_name', name: 'company_name'},
             {data: 'qty', name: 'qty'},
-            {data: 'unit_price', name: 'unit_price'},
-            {data: 'product_br_code', name: 'product_br_code'},
             {data: 'create_info', name: 'create_info'},
             {data: 'product_stock_status', name: 'product_stock_status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}

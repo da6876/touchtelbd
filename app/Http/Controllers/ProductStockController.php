@@ -61,6 +61,96 @@ class ProductStockController extends Controller
         }
     }
 
+    public function showCompanyList()
+    {
+        try {
+            $categories_sub = DB::table('company_info')
+                ->get();
+            return json_encode($categories_sub);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ["o_status_message" => $e->getMessage()];
+        }
+    }
+
+    public function addStockMST(Request $request)
+    {
+        try {
+            $dataMST = array();
+            $primaraynumber = $request['primaraynumber'];
+            $dataMST['product_id'] = $request['product_id'];
+            $dataMST['company_id'] = $request['company_id'];
+            $dataMST['invice_no'] = $request['invice_no'];
+            $dataMST['shot_decs'] = $request['shot_decs'];
+            $dataMST['qty'] = $request['qnty'];
+            $dataMST['product_stock_status'] = $request['product_stock_status'];
+            $dataMST['create_by'] = Session::get('user_info_id');
+            $dataMST['update_by'] = "N";
+            $dataMST['primaryvalue'] = $request['primaraynumber'];
+            $result = DB::table('product_stock_mst')->insert($dataMST);
+            if ($result) {
+                $product_stock_mst_idCbeck = DB::select("SELECT product_stock_mst_id FROM product_stock_mst 
+                                WHERE primaryvalue = '$primaraynumber'");
+                if ($product_stock_mst_idCbeck) {
+                    $product_stock_mst_id = $product_stock_mst_idCbeck[0]->product_stock_mst_id;
+
+                    $color = $request['color'];
+                    $unit_price = $request['unit_price'];
+                    $sell_price = $request['sell_price'];
+                    $product_brcode = $request['product_brcode'];
+                    $product_imei = $request['product_imei'];
+                    $data = array();
+                    for ($x = 0; $x < count($product_imei); $x++) {
+                        $data['product_stock_mst_id'] = $product_stock_mst_id;
+                        $data['color'] = $color[$x];
+                        $data['unit_price'] = $unit_price[$x];
+                        $data['sell_price'] = $sell_price[$x];
+                        $data['product_brcode'] = $product_brcode[$x];
+                        $data['product_imei'] = $product_imei[$x];
+                        $data['create_by'] = Session::get('user_info_id');
+                        $data['update_by'] = "N";
+                        $resultDtl= DB::table('product_stock_dtl')->insert($data);
+                    }
+                    return json_encode(array(
+                        "statusCode" => 200,
+                        "statusMsg" => "Product Stock Info Added Successfully"
+                    ));
+                } else {
+                    return json_encode(array(
+                        "statusCode" => 201,
+                        "statusMsg" => "Failed To add Product Stock"
+                    ));
+                }
+            } else {
+                return json_encode(array(
+                    "statusCode" => 201,
+                    "statusMsg" => "Failed To add Product Stock!!"
+                ));
+            }
+
+            $data = array();
+            for ($x = 0; $x < count($product_id); $x++) {
+                $data['product_id'] = $product_id[$x];
+                $data['company_id'] = $company_id[$x];
+                $data['invice_no'] = $invice_no[$x];
+                $data['shot_decs'] = $shot_decs[$x];
+                $data['qty'] = $qty[$x];
+                $data['product_stock_status'] = $product_stock_status[$x];
+                $data['create_by'] = Session::get('user_info_id');
+                $data['update_by'] = "N";
+                $result = DB::table('product_stock_mst')->insert($data);
+            }
+            return json_encode(array(
+                "statusCode" => 200,
+                "statusMsg" => "Product Stock Info Added Successfully"
+            ));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ["o_status_message" => $e->getMessage()];
+        }
+    }
+
     public function addMorePost(Request $request)
     {
         try {
@@ -81,7 +171,7 @@ class ProductStockController extends Controller
                 $data['shot_decs'] = ".";
                 $data['qty'] = $qnty[$x];
                 $data['color'] = $color[$x];
-                $data['unit_price'] =  $unit_price[$x];
+                $data['unit_price'] = $unit_price[$x];
                 $data['sell_price'] = $sell_price[$x];
                 $data['product_br_code'] = $bar_code[$x];
                 $data['product_ime'] = $ime[$x];
@@ -96,7 +186,6 @@ class ProductStockController extends Controller
                 "statusCode" => 200,
                 "statusMsg" => "Product Stock Bulk Added Successfully"
             ));
-
 
 
         } catch (\Exception $e) {
@@ -165,16 +254,19 @@ class ProductStockController extends Controller
     public function getAllStockInfo()
     {
 
-        $product_stock = DB::select('SELECT product_stock_id, invice_no,PI.product_name , qty, unit_price,
-                                        product_br_code, PS.create_info, product_stock_status 
-                                        FROM product_stock PS,product_info PI
-                                        WHERE PS.product_id = PI.product_id');
-        //return json_encode($product_stock);
+        $product_stock = DB::select('SELECT  PSM.product_stock_mst_id,company_name, invice_no, PI.product_name , qty,
+                                        PSM.create_info, PSM.product_stock_status 
+                                        FROM product_stock_mst PSM,product_stock_dtl PSD,product_info PI,company_info CI
+                                        WHERE PSM.product_id = PI.product_id
+                                        AND PSM.product_stock_mst_id=PSD.product_stock_mst_id
+                                        AND PSM.company_id =CI.company_id
+                                        GROUP BY PSM.invice_no;');
+       // return json_encode($product_stock);
         return DataTables::of($product_stock)
             ->addColumn('action', function ($product_stock) {
                 $buttton = '
                 <div class="button-list">
-                    <a onclick="deleteStockData(' . $product_stock->product_stock_id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-o bigfonts"></i></a>
+                    <a onclick="deleteStockData(' . $product_stock->product_stock_mst_id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-o bigfonts"></i></a>
                 </div>
                 ';
                 return $buttton;
