@@ -67,4 +67,5 @@ Route::post('/autocomplete/fetch', 'RegulerSellController@fetch')->name('autocom
 Route::post('ShowProductByBarCode','RegulerSellController@showProductByBarCode');
 Route::post("PlaceOrder","RegulerSellController@saveOrderData");
 Route::get('/get/all/ProductList','RegulerSellController@getAllProductInfoForSell')->name('all.ProductList');
-Route::get('CashMemo','RegulerSellController@indexs');
+Route::get('/get/all/LastSellInfo','RegulerSellController@getLastSellInfo')->name('all.LastSellInfo');
+Route::get('CashMemo/{invoiceNo}','RegulerSellController@indexs');

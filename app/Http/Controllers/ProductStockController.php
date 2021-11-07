@@ -109,6 +109,7 @@ class ProductStockController extends Controller
                         $data['product_imei'] = $product_imei[$x];
                         $data['create_by'] = Session::get('user_info_id');
                         $data['update_by'] = "N";
+                        $data['sell_status'] = "1";
                         $resultDtl= DB::table('product_stock_dtl')->insert($data);
                     }
                     return json_encode(array(
@@ -254,13 +255,15 @@ class ProductStockController extends Controller
     public function getAllStockInfo()
     {
 
-        $product_stock = DB::select('SELECT  PSM.product_stock_mst_id,company_name, invice_no, PI.product_name , qty,
-                                        PSM.create_info, PSM.product_stock_status 
-                                        FROM product_stock_mst PSM,product_stock_dtl PSD,product_info PI,company_info CI
-                                        WHERE PSM.product_id = PI.product_id
-                                        AND PSM.product_stock_mst_id=PSD.product_stock_mst_id
-                                        AND PSM.company_id =CI.company_id
-                                        GROUP BY PSM.invice_no;');
+        $product_stock = DB::select('SELECT PSM.product_stock_mst_id, PSM.product_id,PI.product_name, 
+                                PSM.company_id,CI.company_name,PSM.invice_no,PSM.qty,
+                                count(PSD.sell_status) as avalable_qty
+                                FROM product_stock_mst PSM,product_stock_dtl PSD,company_info CI,product_info PI
+                                WHERE PSM.product_stock_mst_id =PSD.product_stock_mst_id
+                                AND PSD.sell_status = 1
+                                AND PSM.company_id = CI.company_id
+                                AND PSM.product_id = PI.product_id
+                                GROUP BY PSD.product_stock_mst_id;');
        // return json_encode($product_stock);
         return DataTables::of($product_stock)
             ->addColumn('action', function ($product_stock) {

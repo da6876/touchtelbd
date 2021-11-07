@@ -136,6 +136,7 @@
                                       enctype="multipart/form-data">
                                     {{csrf_field()}}
                                     <input type="hidden" id="customer_id" name="customer_id">
+                                    <input type="hidden" id="invoice_no" name="invoice_no">
 
                                     <table class="table table-bordered" id="productStock">
                                         <thead>
@@ -155,14 +156,25 @@
 
                                             <td class="col-md-6" colspan="3"><b>Grand Total</b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control" name="GrandTotal" id="GrandTotal" type="text" readonly>
+                                                <input class="form-control" name="GrandTotal" id="GrandTotal"
+                                                       type="text" readonly>
                                             </td>
                                         </tr>
                                         <tr>
 
                                             <td class="col-md-6" colspan="3"><b>Receive Amount </b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control AmountReceive" name="ReceiveAmount" id="ReceiveAmount"
+                                                <input class="form-control AmountReceive" name="ReceiveAmount"
+                                                       id="ReceiveAmount"
+                                                       type="number">
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td class="col-md-6" colspan="3"><b>Discount Amount </b></td>
+                                            <td class="col-md-2" colspan="2">
+                                                <input class="form-control AmountReceive" value="0.00"
+                                                       name="discount_price" id="discount_price"
                                                        type="number">
                                             </td>
                                         </tr>
@@ -170,7 +182,34 @@
 
                                             <td class="col-md-6" colspan="3"><b>Deu Amount </b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control" name="DeuAmount" id="DeuAmount" type="number" readonly>
+                                                <input class="form-control" name="DeuAmount" id="DeuAmount"
+                                                       type="number" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td class="col-md-6" colspan="2">
+                                                <label>Status</label>
+                                                <select name="payment_type" id="payment_type"
+                                                        class="form-control">
+                                                    <option value="S">Payment Method</option>
+                                                    <option value="Cash">Cash</option>
+                                                    <option value="Checks">Checks</option>
+                                                    <option value="Debit cards">Debit cards</option>
+                                                    <option value="Credit cards">Credit cards</option>
+                                                    <option value="Credit cards">Credit cards</option>
+                                                    <option value="Mobile payments">Mobile payments</option>
+                                                </select>
+                                            </td>
+                                            <td class="col-md-6" colspan="2">
+                                                <label>Status</label>
+                                                <select name="product_order_status" id="product_order_status"
+                                                        class="form-control">
+                                                    <option value="S">Payment Status</option>
+                                                    <option value="Paid">Paid</option>
+                                                    <option value="UnPaid">UnPaid</option>
+                                                    <option value="Due">Due</option>
+                                                </select>
                                             </td>
                                         </tr>
 
@@ -180,6 +219,11 @@
                                     <button type="button" onclick="confrimOrder()"
                                             class="btn btn-info col-md-3 pull-right">
                                         Confirm Order
+                                    </button>
+
+                                    <button type="button" onclick="showal('ZIYNB1K')"
+                                            class="btn btn-info col-md-3 pull-right">
+                                        Confirm Orderaaa
                                     </button>
                                 </form>
 
@@ -341,7 +385,7 @@
             datatype: 'JSON',
             success: function (data) {
                 console.log(data);
-                if (data!='[]') {
+                if (data != '[]') {
                     var resultData = $.parseJSON(data);
                     var bodyData = '';
 
@@ -349,11 +393,12 @@
                         bodyData += "<tr id='row" + ii + "' class='dynamic-added'>"
                         bodyData += "<td>" +
                             " Name : " + resultData[x].product_name + "<br>" +
-                            " IME : " + resultData[x].product_ime + "<br>" +
+                            " IME : " + resultData[x].product_imei + "<br>" +
                             " Color : " + resultData[x].color + "" +
                             "</td>" +
                             "<td> " +
-                            "<input type='hidden' name='product_id[]' id='product_id_" + ii + "'  class='form-control product_id' value='" + resultData[x].product_stock_id + "' for='" + ii + "'/> " +
+                            "<input type='hidden' name='product_id[]' id='product_id_" + ii + "'  class='form-control product_id' value='" + resultData[x].product_id + "' for='" + ii + "'/> " +
+                            "<input type='hidden' name='product_brcode[]' id='product_id_" + ii + "'  class='form-control product_id' value='" + resultData[x].product_brcode + "' for='" + ii + "'/> " +
                             "<input type='number' name='product_price[]' id='product_price_" + ii + "'  class='form-control product_price' value='" + resultData[x].sell_price + "' for='" + ii + "' readonly/> " +
                             "</td>" +
                             "<td> <input type='number' min='0' name='quantity[]' id='quantity_" + ii + "'  class='form-control quantity' value='0'  for='" + ii + "'/> </td>" +
@@ -366,7 +411,7 @@
                         $('.noItemHere').hide();
                         $("#productStock").append(bodyData);
                     }
-                }else {
+                } else {
                     swal({
                         title: "Oops!! Sorry ",
                         text: "No Product Found !!",
@@ -411,6 +456,14 @@
 </script>
 
 <script>
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (var i = 0; i < 7; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+    }
+
     var grandTotal = 0.0;
     var table1 = $('#ProductsdataTabel').DataTable({
         "processing": true,
@@ -434,6 +487,7 @@
         $('#customer_address').val(addres);
         $('#customer_id').val(id);
         $('#countryList').fadeOut();
+        document.getElementById('invoice_no').value = makeid();
 
 
     }
@@ -479,9 +533,14 @@
     $("#productStock").on('input', 'input.AmountReceive', function () {
         var TotalPrice = $('#GrandTotal').val();
         var GivenMoney = $('#ReceiveAmount').val();
+        var discount_price = $('#discount_price').val();
         if (TotalPrice != "" && GivenMoney != "") {
             var DueAmount = TotalPrice - GivenMoney;
             $('#DeuAmount').val(DueAmount.toFixed(2));
+            if (discount_price <= DueAmount) {
+                DueAmount = DueAmount - discount_price;
+                $('#DeuAmount').val(DueAmount.toFixed(2));
+            }
         } else {
             swal({
                 title: "Oops",
@@ -511,39 +570,58 @@
     }
 
     var postURL = "<?php echo url('PlaceOrder'); ?>";
+    var postURL11 = "<?php echo url('CashMemo/ZIYNB1K'); ?>";
 
     function confrimOrder() {
         var customer_name = $('#customer_name').val();
         var customer_id = $('#customer_id').val();
         var ReceiveAmount = $('#ReceiveAmount').val();
+        var payment_type = $('#payment_type').val();
+        var product_order_status = $('#product_order_status').val();
         if (customer_id != "" && customer_name != "") {
             if (ReceiveAmount != "") {
-                $.ajax({
-                    url:postURL,
-                    method:"POST",
-                    data:$('#orderConfirm').serialize(),
-                    type:'json',
-                    success:function(data)
-                    {
-                        console.log(data);
-                        var dataResult = JSON.parse(data);
-                        if (dataResult.statusCode == 200) {
+                if (payment_type != "") {
+                    if (product_order_status != "") {
+                        $.ajax({
+                            url: postURL,
+                            method: "POST",
+                            data: $('#orderConfirm').serialize(),
+                            type: 'json',
+                            success: function (data) {
+                                console.log(data);
+                                var dataResult = JSON.parse(data);
+                                if (dataResult.statusCode == 200) {
 
-                            $('.dynamic-added').remove();
-                            $('#orderConfirm')[0].reset();
-                            swal("Success", dataResult.statusMsg);
-
-                            document.getElementById('invice_no').value = makeid();
-                        }else  {
-                            swal({
-                                title: "Oops",
-                                text: "Bulk Data Insert Failed",
-                                icon: "error",
-                                timer: '1500'
-                            });
-                        }
+                                    $('.dynamic-added').remove();
+                                    $('#orderConfirm')[0].reset();
+                                    swal("Success", dataResult.statusMsg).then(function () {
+                                        var postURL1 = "{{ url('CashMemo') }}" + '/' + dataResult.invoice_no;
+                                        window.location = postURL1;
+                                    });
+                                } else {
+                                    swal({
+                                        title: "Oops",
+                                        text: "Bulk Data Insert Failed",
+                                        icon: "error",
+                                        timer: '1500'
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        swal({
+                            title: "Oops",
+                            text: "Select Payment Status!!",
+                            timer: '2500'
+                        });
                     }
-                });
+                } else {
+                    swal({
+                        title: "Oops",
+                        text: "Select Payment Type !!",
+                        timer: '2500'
+                    });
+                }
             } else {
                 swal({
                     title: "Oops",
@@ -560,9 +638,22 @@
         }
     }
 
+    function showal(invoice) {
+        swal("Success", "aa").then(function () {
+            var postURL1 = "{{ url('CashMemo') }}" + '/' + invoice;
+            window.location = postURL1;
+        })
+    }
+
+
     function clearfrom() {
         $('.categoriesAdd form')[0].reset();
         $('.categoriesAdd').modal('show');
+    }
+
+    function addCustomer() {
+        $('.categoriesAdd').modal('show');
+        $('.categoriesAdd form')[0].reset();
     }
 
     function addcategoriesData() {

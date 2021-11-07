@@ -126,7 +126,7 @@
                                         </button>
                                     </span>
                                     <hr>
-
+                                    <div id="last-barcode"></div>
                                     <table class="table table-bordered" id="productStockMst" width="100%"
                                            cellspacing="0">
                                         <thead>
@@ -254,7 +254,6 @@
 
     function addDetailsStockInfo() {
 
-        mainInfoI++;
         $('#productStockMst').append('' +
             '' +
             '<tr id="row' + mainInfoI + '" class="dynamic-added-mst">' +
@@ -268,13 +267,13 @@
             '<input name="sell_price[]" placeholder="Sell Price" type="number" class="form-control sell_price" />' +
             '</td>' +
             '<td>' +
-            '<input type="text" name="product_brcode[]" placeholder="BRCode Decs" class="form-control product_brcode" />' +
+            '<input type="text" name="product_brcode[]" id="product_brcode' + mainInfoI + '" placeholder="BRCode Decs" class="form-control" />' +
             '</td>' +
             '<td>' +
             '<input type="text" name="product_imei[]" placeholder="IMEI" class="form-control product_imei" />' +
             '</td>' +
             '<td>' +
-            '<button type="button" name="remove" onclick="removeRow()" id="' + mainInfoI + '" class="btn btn-danger btn_remove">X</button>' +
+            '<button type="button" name="remove" onclick="removeRow(' + mainInfoI + ')" id="' + mainInfoI + '" class="btn btn-danger btn_remove">X</button>' +
             '</td>' +
             '</tr>' +
             '');
@@ -326,9 +325,8 @@
 
     }
 
-    function removeRow() {
-        var button_id = $(this).attr("id");
-        $('#row' + button_id + '').remove();
+    function removeRow(id) {
+        $('#row' + id + '').remove();
     }
 
     function savestockMasterData() {
@@ -379,10 +377,10 @@
         interval = setInterval(() => barcode = '', 20);
     });
     function handleBarcode(scanned_barcode) {
-        i++;
+        mainInfoI++;
         document.querySelector('#last-barcode').innerHTML = scanned_barcode;
-        addNewRow();
-        $('#bar_code' + i).val(scanned_barcode);
+        addstockMasterData();
+        $('#product_brcode' + mainInfoI).val(scanned_barcode);
     }
 
 </script>

@@ -90,7 +90,7 @@
 
                 <div class="row">
 
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="card">
                             <div class="card-header">
                                 <h3><i class="fa fa-users"></i> Last Selling Info</h3>
@@ -98,14 +98,14 @@
 
                             <div class="card-body">
 
-                                <table id="example1"
+                                <table id="LastSellInfo"
                                        class="table">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Office</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>Customer Name</th>
+                                        <th>Product</th>
+                                        <th>Sell By</th>
+                                        <th>Invoice</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -118,7 +118,7 @@
                     </div>
 
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card mb-3">
                             <div class="card-header">
                                 <h3><i class="fa fa-star-o"></i> Tasks progress</h3>
@@ -175,5 +175,21 @@
 
 <!-- END Java Script for this page -->
 @include('layouts.footer_files')
+
+<script>
+    var table1 = $('#LastSellInfo').DataTable({
+        "processing": true,
+        "serverSide": true,
+        searching: false,
+        ajax: '{!! route('all.LastSellInfo') !!}',
+        columns: [
+            {data: 'customer_name', name: 'customer_name'},
+            {data: 'product_name', name: 'product_name'},
+            {data: 'user_name', name: 'user_name'},
+            {data: 'invoice_no', name: 'invoice_no'}
+        ]
+    });
+
+</script>
 </body>
 </html>

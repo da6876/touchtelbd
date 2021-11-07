@@ -65,8 +65,7 @@
                                             <th>Product Name</th>
                                             <th>Company Name</th>
                                             <th>Qty</th>
-                                            <th>Create By</th>
-                                            <th>Status</th>
+                                            <th>Available Qty</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
@@ -113,8 +112,7 @@
             {data: 'product_name', name: 'product_name'},
             {data: 'company_name', name: 'company_name'},
             {data: 'qty', name: 'qty'},
-            {data: 'create_info', name: 'create_info'},
-            {data: 'product_stock_status', name: 'product_stock_status'},
+            {data: 'avalable_qty', name: 'avalable_qty'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ]
     });

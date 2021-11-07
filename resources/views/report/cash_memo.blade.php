@@ -48,14 +48,9 @@
 
                             <div class="card-body">
                                 <div class="page-header text-blue-d2">
-                                    <h1 class="page-title text-secondary-d1">
-                                        Invoice
-                                        <small class="page-info">
-                                            <i class="fa fa-angle-double-right text-80"></i>
-                                            ID: #111-222
-                                        </small>
-                                    </h1>
-
+                                    <h4 class="page-title text-secondary-d1">
+                                        Invoice No : {{$invoice_no}}
+                                    </h4>
                                     <div class="page-tools">
                                         <div class="action-buttons">
                                             <a onclick="printDiv('printMe')"
@@ -98,24 +93,23 @@
                                                             </div>
                                                             <!-- col-lg-6 end here -->
                                                             <div class="col-md-12">
+<br>
                                                                 <div class="row">
                                                                     <div class="col-md-6">
-                                                                        <div class="well">
-                                                                            <ul class="list-unstyled mb0">
-                                                                                <li><strong>Invoice</strong> #936988</li>
-                                                                                <li><strong>Invoice Date:</strong> Monday, October 10th, 2015</li>
-                                                                                <li><strong>Due Date:</strong> Thursday, December 1th, 2015</li>
+                                                                            <ul class="list-unstyled">
+                                                                                <li><strong>Invoice</strong> #{{$invoice_no}}</li>
+                                                                                <li><strong>Invoice Date:</strong> {{$create_Date}}</li>
+                                                                                <li><strong>Invoice By:</strong> {{$create_by}}</li>
                                                                                 <li><strong>Status:</strong> <span class="label label-danger">UNPAID</span></li>
                                                                             </ul>
-                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-md-6">
+                                                                    <div class="col-md-6 text-right">
                                                                         <ul class="list-unstyled">
                                                                             <li><strong>Invoiced To</strong></li>
-                                                                            <li>Jakob Smith</li>
-                                                                            <li>Roupark 37</li>
-                                                                            <li>New York, NY, 2014</li>
-                                                                            <li>USA</li>
+                                                                            <li><strong>Name    : </strong>{{$customer_name}}</li>
+                                                                            <li><strong>Phone   : </strong>{{$customer_phone}}</li>
+                                                                            <li><strong>Email   : </strong>{{$customer_email}}</li>
+                                                                            <li><strong>Address : </strong>{{$customer_address}}</li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -173,7 +167,7 @@
                                                                     <p class="text-center">After Sales Service Will be Provided By SAMSUNG Service Center</p>
                                                                     <p class="text-center">No Exchange No Return, Thanks For Shopping</p>
                                                                     <p class="text-center"><b>Help Line :- 09612-300-300, 08000-300-300 (toll free)</b></p>
-                                                                    <p class="text-center">Generated on Monday, October 08th, 2015 </p>
+                                                                    <p class="text-center">Generated on {{$create_Date}} </p>
                                                                 </div>
                                                             </div>
                                                             <!-- col-lg-12 end here -->
