@@ -99,7 +99,8 @@ class RegulerSellController extends Controller
                                     ,PSD.sell_price,product_name,PSD.product_imei,color
                                     FROM product_info PI,product_stock_mst PSM,product_stock_dtl PSD
                                     WHERE PI.product_id = PSM.product_id
-                                    AND PSM.product_stock_mst_id =  PSD.product_stock_mst_id
+                                    AND PSM.product_id =  PSD.product_id
+                                    AND PSM.invice_no =  PSD.invice_no
                                     and PSD.sell_status >0;");
 
         return DataTables::of($categories)
@@ -173,7 +174,8 @@ class RegulerSellController extends Controller
                 $productInfo = DB::select("SELECT PI.product_id,PSD.product_brcode,PSM.product_stock_mst_id,PI.product_id,PSD.sell_price,product_name,PSD.product_imei,color
                                     FROM product_info PI,product_stock_mst PSM,product_stock_dtl PSD
                                     WHERE PI.product_id = PSM.product_id
-                                    AND PSM.product_stock_mst_id =  PSD.product_stock_mst_id
+                                    AND PSM.invice_no =  PSD.invice_no
+                                    AND PSM.product_id =  PSD.product_id
                                     and PSD.product_brcode = '$code'
                                     and PSD.sell_status >0;");
 

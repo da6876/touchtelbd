@@ -91,7 +91,9 @@ class ProductStockController extends Controller
             if ($result) {
                 $product_stock_mst_idCbeck = DB::select("SELECT product_stock_mst_id FROM product_stock_mst 
                                 WHERE primaryvalue = '$primaraynumber'");
+
                 if ($product_stock_mst_idCbeck) {
+
                     $product_stock_mst_id = $product_stock_mst_idCbeck[0]->product_stock_mst_id;
 
                     $color = $request['color'];
@@ -101,7 +103,8 @@ class ProductStockController extends Controller
                     $product_imei = $request['product_imei'];
                     $data = array();
                     for ($x = 0; $x < count($product_imei); $x++) {
-                        $data['product_stock_mst_id'] = $product_stock_mst_id;
+                        $data['product_id'] = $request['product_id'];
+                        $data['invice_no'] = $request['invice_no'];
                         $data['color'] = $color[$x];
                         $data['unit_price'] = $unit_price[$x];
                         $data['sell_price'] = $sell_price[$x];
@@ -116,20 +119,26 @@ class ProductStockController extends Controller
                         "statusCode" => 200,
                         "statusMsg" => "Product Stock Info Added Successfully"
                     ));
-                } else {
+
+                }
+
+                else {
                     return json_encode(array(
                         "statusCode" => 201,
                         "statusMsg" => "Failed To add Product Stock"
                     ));
                 }
-            } else {
+
+            }
+
+            else {
                 return json_encode(array(
                     "statusCode" => 201,
                     "statusMsg" => "Failed To add Product Stock!!"
                 ));
             }
 
-            $data = array();
+            /*$data = array();
             for ($x = 0; $x < count($product_id); $x++) {
                 $data['product_id'] = $product_id[$x];
                 $data['company_id'] = $company_id[$x];
@@ -144,7 +153,7 @@ class ProductStockController extends Controller
             return json_encode(array(
                 "statusCode" => 200,
                 "statusMsg" => "Product Stock Info Added Successfully"
-            ));
+            ));*/
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -221,27 +230,6 @@ class ProductStockController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $singleDataShow = DB::table('user_type')
-            ->where('user_type_id', $id)
-            ->get();
-        return $singleDataShow;
-    }
-
-
-    public function edit($id)
-    {
-        //
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-
     public function destroy($id)
     {
         DB::table('product_stock')
@@ -256,14 +244,13 @@ class ProductStockController extends Controller
     {
 
         $product_stock = DB::select('SELECT PSM.product_stock_mst_id, PSM.product_id,PI.product_name, 
-                                PSM.company_id,CI.company_name,PSM.invice_no,PSM.qty,
-                                count(PSD.sell_status) as avalable_qty
-                                FROM product_stock_mst PSM,product_stock_dtl PSD,company_info CI,product_info PI
-                                WHERE PSM.product_stock_mst_id =PSD.product_stock_mst_id
-                                AND PSD.sell_status = 1
-                                AND PSM.company_id = CI.company_id
-                                AND PSM.product_id = PI.product_id
-                                GROUP BY PSD.product_stock_mst_id;');
+                                    PSM.company_id,CI.company_name,PSM.invice_no,PSM.qty,
+                                    (Select count(sell_status) from product_stock_dtl where product_id=PSM.product_id AND sell_status=1 ) as avalable_qty
+                                    FROM product_stock_mst PSM,product_stock_dtl PSD,company_info CI,product_info PI
+                                    WHERE PSM.invice_no =PSD.invice_no
+                                    AND PSM.company_id = CI.company_id
+                                    AND PSM.product_id = PI.product_id
+                                    GROUP BY PSM.product_id;');
        // return json_encode($product_stock);
         return DataTables::of($product_stock)
             ->addColumn('action', function ($product_stock) {
