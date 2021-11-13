@@ -180,6 +180,15 @@
                                         </tr>
                                         <tr>
 
+                                            <td class="col-md-6" colspan="3"><b>Service Charge </b></td>
+                                            <td class="col-md-2" colspan="2">
+                                                <input class="form-control AmountReceive" value="0.00"
+                                                       name="other_price" id="other_price"
+                                                       type="number">
+                                            </td>
+                                        </tr>
+                                        <tr>
+
                                             <td class="col-md-6" colspan="3"><b>Deu Amount </b></td>
                                             <td class="col-md-2" colspan="2">
                                                 <input class="form-control" name="DeuAmount" id="DeuAmount"

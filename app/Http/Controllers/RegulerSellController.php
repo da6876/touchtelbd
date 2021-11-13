@@ -37,14 +37,26 @@ class RegulerSellController extends Controller
 
         try {
 
-            $categories = DB::select("SELECT invoice_no, PO.product_id,PI.product_name,PSD.color,PSD.product_imei,
+            /*$categories = DB::select("SELECT invoice_no, PO.product_id,PI.product_name,PSD.color,PSD.product_imei,
                         PO.product_brcode,qty,PO.sell_price,PO.create_by,PO.create_Date,
                         PO.customer_info_id,CI.customer_name,CI.customer_phone,CI.customer_email,CI.customer_address
                         FROM product_order PO,product_info PI,customer_info CI,product_stock_dtl PSD
                         WHERE PO.invoice_no = '$invoiceNo'
                         AND PO.product_id = PI.product_id
                         AND PO.customer_info_id =CI.customer_info_id
-                        AND PO.product_brcode= PSD.product_brcode;");
+                        AND PO.product_brcode= PSD.product_brcode;");*/
+            $categories = DB::select("SELECT invoice_no, PO.product_id,PI.product_name,PSD.color,PSD.product_imei,
+						PO.product_brcode,qty,PO.sell_price,PO.create_by,PO.create_Date,
+						PO.customer_info_id,CI.customer_name,CI.customer_phone,CI.customer_email,CI.customer_address,
+						(SELECT SUM(sell_price) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_total,
+						(SELECT SUM(qty) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_qty,
+						(SELECT SUM(other_price) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_other_price,
+						(SELECT SUM(vat_amount) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_vat_amount
+						FROM product_order PO,product_info PI,customer_info CI,product_stock_dtl PSD
+						WHERE PO.invoice_no = '$invoiceNo'
+						AND PO.product_id = PI.product_id
+						AND PO.customer_info_id =CI.customer_info_id
+						AND PO.product_brcode= PSD.product_brcode;");
            $data = array();
            $data1 = array();
             $data2 = array();
@@ -64,6 +76,10 @@ class RegulerSellController extends Controller
                 $customer_phone = $categories[$x]->customer_phone;
                 $data1['customer_address'] = $categories[$x]->customer_address;
                 $customer_address = $categories[$x]->customer_address;
+                $GRANT_total = $categories[$x]->GRANT_total;
+                $GRANT_qty = $categories[$x]->GRANT_qty;
+                $GRANT_other_price = $categories[$x]->GRANT_other_price;
+                $GRANT_vat_amount = $categories[$x]->GRANT_vat_amount;
 
                 $data2['product_id'][$x] = $categories[$x]->product_id;
                 $data2['product_name'][$x] = $categories[$x]->product_name;
@@ -75,8 +91,12 @@ class RegulerSellController extends Controller
 
                 $data['singleinfo']=$data1;
                 $data['multipleinfo']=$data2;
+                $product_id= $data2['product_id'];
+                $product_name= $data2['product_name'];
+                $sell_price= $data2['sell_price'];
+                $qty= $data2['qty'];
             }
-           //return json_encode($data);
+           //return json_encode($product_id);
            // return view('report.cash_memo', compact('data1','data2'));
             return view('report.cash_memo')
                 ->with('invoice_no', $invoice_no)
@@ -85,6 +105,14 @@ class RegulerSellController extends Controller
                 ->with('customer_phone', $customer_phone)
                 ->with('customer_email', $customer_email)
                 ->with('customer_address', $customer_address)
+                ->with('GRANT_total', $GRANT_total)
+                ->with('GRANT_qty', $GRANT_qty)
+                ->with('GRANT_other_price', $GRANT_other_price)
+                ->with('GRANT_vat_amount', $GRANT_vat_amount)
+                ->with('product_id', $product_id)
+                ->with('product_name', $product_name)
+                ->with('qty', $qty)
+                ->with('sell_price', $sell_price)
                 ->with('create_by', $create_by);
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -214,6 +242,7 @@ class RegulerSellController extends Controller
                 $data1['customer_info_id'] = $customer_id;
                 $data1['qty'] = $qnty[$x];
                 $data1['sell_price'] = $total_cost[$x];
+                $data1['other_price'] = $total_cost[$x];
                 $data1['create_by'] =Session::get('user_info_id');
                 $data1['create_date'] =$this->getDates();
                 $data1['update_by'] = "N";
