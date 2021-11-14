@@ -9,7 +9,7 @@
     <meta name="author" content="Pike Web Development - https://www.pikephp.com">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="public/assets/img/touchtel.png">
 
     <!-- Bootstrap CSS -->
     <link href="{{asset('public/assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />

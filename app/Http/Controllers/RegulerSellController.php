@@ -37,83 +37,227 @@ class RegulerSellController extends Controller
 
         try {
 
-            /*$categories = DB::select("SELECT invoice_no, PO.product_id,PI.product_name,PSD.color,PSD.product_imei,
-                        PO.product_brcode,qty,PO.sell_price,PO.create_by,PO.create_Date,
-                        PO.customer_info_id,CI.customer_name,CI.customer_phone,CI.customer_email,CI.customer_address
-                        FROM product_order PO,product_info PI,customer_info CI,product_stock_dtl PSD
-                        WHERE PO.invoice_no = '$invoiceNo'
-                        AND PO.product_id = PI.product_id
-                        AND PO.customer_info_id =CI.customer_info_id
-                        AND PO.product_brcode= PSD.product_brcode;");*/
-            $categories = DB::select("SELECT invoice_no, PO.product_id,PI.product_name,PSD.color,PSD.product_imei,
-						PO.product_brcode,qty,PO.sell_price,PO.create_by,PO.create_Date,
-						PO.customer_info_id,CI.customer_name,CI.customer_phone,CI.customer_email,CI.customer_address,
-						(SELECT SUM(sell_price) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_total,
-						(SELECT SUM(qty) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_qty,
-						(SELECT SUM(other_price) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_other_price,
-						(SELECT SUM(vat_amount) FROM product_order WHERE invoice_no = '$invoiceNo') as GRANT_vat_amount
-						FROM product_order PO,product_info PI,customer_info CI,product_stock_dtl PSD
-						WHERE PO.invoice_no = '$invoiceNo'
-						AND PO.product_id = PI.product_id
-						AND PO.customer_info_id =CI.customer_info_id
-						AND PO.product_brcode= PSD.product_brcode;");
-           $data = array();
-           $data1 = array();
+            $categories = DB::select("SELECT PO.product_order_id,PO.invoice_no,PO.service_price,PO.discount_price,
+                                PO.recive_amount,PO.deu_amount,PO.grand_total,PO.payment_type,PO.product_order_status,
+                                PO.create_by,PO.create_Date,PO.customer_info_id,CI.customer_name,CI.customer_phone,
+                                CI.customer_email,CI.customer_address,POI.product_id,PI.product_name,PSD.color,
+                                PSD.product_imei,PSD.product_brcode,PSD.sell_price
+                                FROM product_order PO,customer_info CI,product_order_invoice POI,
+                                product_info PI,product_stock_mst PSM,product_stock_dtl PSD
+                                WHERE PO.invoice_no = '$invoiceNo'
+                                AND PO.customer_info_id=CI.customer_info_id
+                                AND PO.invoice_no = POI.invoice_no
+                                AND POI.product_id= PI.product_id
+                                AND PI.product_id= PSM.product_id
+                                AND PI.product_id= PSD.product_id
+                                AND PSD.product_id = PSM.product_id
+                                AND PSD.invice_no = PSM.invice_no
+                                GROUP BY PSD.product_id;");
+
             $data2 = array();
             for ($x = 0; $x < count($categories); $x++) {
-
-                $data1['invoice_no'] = $categories[$x]->invoice_no;
                 $invoice_no = $categories[$x]->invoice_no;
-                $data1['create_by'] = $categories[$x]->create_by;
+                $payment_type = $categories[$x]->payment_type;
+                $product_order_status = $categories[$x]->product_order_status;
                 $create_by = $categories[$x]->create_by;
-                $data1['create_Date'] = $categories[$x]->create_Date;
                 $create_Date = $categories[$x]->create_Date;
-                $data1['customer_info_id'] = $categories[$x]->customer_info_id;
-                $data1['customer_name'] = $categories[$x]->customer_name;
                 $customer_name = $categories[$x]->customer_name;
-                $data1['customer_email'] = $categories[$x]->customer_email;
                 $customer_email = $categories[$x]->customer_email;
                 $customer_phone = $categories[$x]->customer_phone;
-                $data1['customer_address'] = $categories[$x]->customer_address;
                 $customer_address = $categories[$x]->customer_address;
-                $GRANT_total = $categories[$x]->GRANT_total;
-                $GRANT_qty = $categories[$x]->GRANT_qty;
-                $GRANT_other_price = $categories[$x]->GRANT_other_price;
-                $GRANT_vat_amount = $categories[$x]->GRANT_vat_amount;
+                $service_price = $categories[$x]->service_price;
+                $discount_price = $categories[$x]->discount_price;
+                $recive_amount = $categories[$x]->recive_amount;
+                $deu_amount = $categories[$x]->deu_amount;
+                $grand_total = $categories[$x]->grand_total;
 
                 $data2['product_id'][$x] = $categories[$x]->product_id;
                 $data2['product_name'][$x] = $categories[$x]->product_name;
                 $data2['product_imei'][$x] = $categories[$x]->product_imei;
                 $data2['product_brcode'][$x] = $categories[$x]->product_brcode;
-                $data2['qty'][$x] = $categories[$x]->qty;
+                $data2['color'][$x] = $categories[$x]->color;
                 $data2['sell_price'][$x] = $categories[$x]->sell_price;
+
                 $data2['update_date'][$x]= "N";
 
-                $data['singleinfo']=$data1;
-                $data['multipleinfo']=$data2;
                 $product_id= $data2['product_id'];
                 $product_name= $data2['product_name'];
+                $product_brcode= $data2['product_brcode'];
+                $product_imei= $data2['product_imei'];
+                $color= $data2['color'];
                 $sell_price= $data2['sell_price'];
-                $qty= $data2['qty'];
             }
-           //return json_encode($product_id);
-           // return view('report.cash_memo', compact('data1','data2'));
             return view('report.cash_memo')
                 ->with('invoice_no', $invoice_no)
+                ->with('payment_type', $payment_type)
+                ->with('product_order_status', $product_order_status)
                 ->with('create_Date', $create_Date)
                 ->with('customer_name', $customer_name)
                 ->with('customer_phone', $customer_phone)
                 ->with('customer_email', $customer_email)
                 ->with('customer_address', $customer_address)
-                ->with('GRANT_total', $GRANT_total)
-                ->with('GRANT_qty', $GRANT_qty)
-                ->with('GRANT_other_price', $GRANT_other_price)
-                ->with('GRANT_vat_amount', $GRANT_vat_amount)
+                ->with('service_price', $service_price)
+                ->with('discount_price', $discount_price)
+                ->with('recive_amount', $recive_amount)
+                ->with('deu_amount', $deu_amount)
+                ->with('grand_total', $grand_total)
                 ->with('product_id', $product_id)
                 ->with('product_name', $product_name)
-                ->with('qty', $qty)
+                ->with('product_brcode', $product_brcode)
+                ->with('product_imei', $product_imei)
+                ->with('color', $color)
                 ->with('sell_price', $sell_price)
                 ->with('create_by', $create_by);
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    function invoicesearch(){
+        $this->AuthCheck();
+
+        try {
+            DB::connection()->getPdo();
+            return view('report.search_invoice');
+        } catch (\Exception $e) {
+            return view('errorpage.database_error');
+        }
+    }
+
+    function invoiceSearchIN(){
+        $this->AuthCheck();
+
+        try {
+            DB::connection()->getPdo();
+            return view('report.search_invoice_in');
+        } catch (\Exception $e) {
+            return view('errorpage.database_error');
+        }
+    }
+
+    function searchInvoiceByNo(Request $request)
+    {
+        try {
+            if ($request->get('query')) {
+                $query = $request->get('query');
+                $data = DB::table('product_order')
+                    ->where('invoice_no', 'LIKE', "%{$query}%")
+                    ->get();
+                $output = '<ul id="myid" class="list-group" style="display:block; position:relative">';
+
+                foreach ($data as $row) {
+                    $output .= '<li class="list-group-item list-group-item-action list-group-item-light" onclick="setData(' ."' $row->invoice_no'". ')" id=' . $row->invice_no . '><a href="#">' . $row->invice_no . '</a></li>';
+                }
+                $output .= '</ul>';
+                echo $output;
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ["o_status_message" => $e->getMessage()];
+        }
+    }
+
+    function searchInvoiceByNoIn(Request $request)
+    {
+        try {
+            if ($request->get('query')) {
+                $query = $request->get('query');
+                $data = DB::table('product_stock_mst')
+                    ->where('invice_no', 'LIKE', "%{$query}%")
+                    ->groupBy('invice_no')
+                    ->get();
+                $output = '<ul id="myid" class="list-group" style="display:block; position:relative">';
+
+                foreach ($data as $row) {
+                    $output .= '<li class="list-group-item list-group-item-action list-group-item-light" onclick="setData(' ."' $row->invice_no'". ')" id=' . $row->invice_no . '><a href="#">' . $row->invice_no . '</a></li>';
+                }
+                $output .= '</ul>';
+                echo $output;
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ["o_status_message" => $e->getMessage()];
+        }
+    }
+
+    public function invoiceSearchNo($invoiceNo){
+        $this->AuthCheck();
+
+        try {
+
+            $categories = DB::select("SELECT PO.product_order_id,PO.invoice_no,PO.service_price,PO.discount_price,
+                                PO.recive_amount,PO.deu_amount,PO.grand_total,PO.payment_type,PO.product_order_status,
+                                PO.create_by,PO.create_Date,PO.customer_info_id,CI.customer_name,CI.customer_phone,
+                                CI.customer_email,CI.customer_address,POI.product_id,PI.product_name,PSD.color,
+                                PSD.product_imei,PSD.product_brcode,PSD.sell_price
+                                FROM product_order PO,customer_info CI,product_order_invoice POI,
+                                product_info PI,product_stock_mst PSM,product_stock_dtl PSD
+                                WHERE PO.invoice_no = '$invoiceNo'
+                                AND PO.customer_info_id=CI.customer_info_id
+                                AND PO.invoice_no = POI.invoice_no
+                                AND POI.product_id= PI.product_id
+                                AND PI.product_id= PSM.product_id
+                                AND PI.product_id= PSD.product_id
+                                AND PSD.product_id = PSM.product_id
+                                AND PSD.invice_no = PSM.invice_no
+                                GROUP BY PSD.product_id;");
+
+            $data2 = array();
+            for ($x = 0; $x < count($categories); $x++) {
+                $invoice_no = $categories[$x]->invoice_no;
+                $payment_type = $categories[$x]->payment_type;
+                $product_order_status = $categories[$x]->product_order_status;
+                $create_by = $categories[$x]->create_by;
+                $create_Date = $categories[$x]->create_Date;
+                $customer_name = $categories[$x]->customer_name;
+                $customer_email = $categories[$x]->customer_email;
+                $customer_phone = $categories[$x]->customer_phone;
+                $customer_address = $categories[$x]->customer_address;
+                $service_price = $categories[$x]->service_price;
+                $discount_price = $categories[$x]->discount_price;
+                $recive_amount = $categories[$x]->recive_amount;
+                $deu_amount = $categories[$x]->deu_amount;
+                $grand_total = $categories[$x]->grand_total;
+
+                $data2['product_id'][$x] = $categories[$x]->product_id;
+                $data2['product_name'][$x] = $categories[$x]->product_name;
+                $data2['product_imei'][$x] = $categories[$x]->product_imei;
+                $data2['product_brcode'][$x] = $categories[$x]->product_brcode;
+                $data2['color'][$x] = $categories[$x]->color;
+                $data2['sell_price'][$x] = $categories[$x]->sell_price;
+
+                $data2['update_date'][$x]= "N";
+
+                $product_id= $data2['product_id'];
+                $product_name= $data2['product_name'];
+                $product_brcode= $data2['product_brcode'];
+                $product_imei= $data2['product_imei'];
+                $color= $data2['color'];
+                $sell_price= $data2['sell_price'];
+            }
+            return view('report.cash_memo')
+                ->with('invoice_no', $invoice_no)
+                ->with('payment_type', $payment_type)
+                ->with('product_order_status', $product_order_status)
+                ->with('create_Date', $create_Date)
+                ->with('customer_name', $customer_name)
+                ->with('customer_phone', $customer_phone)
+                ->with('customer_email', $customer_email)
+                ->with('customer_address', $customer_address)
+                ->with('service_price', $service_price)
+                ->with('discount_price', $discount_price)
+                ->with('recive_amount', $recive_amount)
+                ->with('deu_amount', $deu_amount)
+                ->with('grand_total', $grand_total)
+                ->with('product_id', $product_id)
+                ->with('product_name', $product_name)
+                ->with('product_brcode', $product_brcode)
+                ->with('product_imei', $product_imei)
+                ->with('color', $color)
+                ->with('sell_price', $sell_price)
+                ->with('create_by', $create_by);
+
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -148,11 +292,11 @@ class RegulerSellController extends Controller
     public function getLastSellInfo()
     {
 
-        $categories = DB::select("SELECT PO.invoice_no, PO.product_id,PI.product_name,PO.customer_info_id,CI.customer_name,
-                                    PO.qty, PO.sell_price, PO.create_by,UI.user_name
-                                    FROM product_order PO,customer_info CI,product_info PI,user_info UI
+        $categories = DB::select("SELECT PO.invoice_no, PI.product_name,PO.customer_info_id,CI.customer_name,PO.grand_total, PO.create_by,UI.user_name
+                                    FROM product_order PO,product_order_invoice POI,customer_info CI,product_info PI,user_info UI
                                     WHERE CI.customer_info_id = PO.customer_info_id
-                                    AND PO.product_id = PI.product_id
+                                    AND PO.invoice_no = POI.invoice_no
+                                    AND POI.product_id = PI.product_id
                                     AND PO.create_by = UI.user_info_id;");
 
         return DataTables::of($categories)
@@ -220,54 +364,47 @@ class RegulerSellController extends Controller
     {
         try {
             $invoice_no = $request['invoice_no'];
-            $customer_id = $request['customer_id'];
-            $product_id = $request['product_id'];
-            $product_brcode = $request['product_brcode'];
-            $qnty = $request['quantity'];
-            $total_cost = $request['total_cost'];
-            $DeuAmount = $request['DeuAmount'];
-            $ReceiveAmount = $request['ReceiveAmount'];
-            $GrandTotal = $request['GrandTotal'];
-            $discount_price = $request['discount_price'];
-            $product_order_status = "Success";
 
             $data1 = array();
+
+            $data1['invoice_no'] = $invoice_no;
+            $data1['customer_info_id'] = $request['customer_id'];
+            $data1['service_price'] = $request['other_price'];
+            $data1['discount_price'] = $request['discount_price'];
+            $data1['recive_amount'] = $request['ReceiveAmount'];
+            $data1['deu_amount'] = $request['DeuAmount'];
+            $data1['grand_total'] = $request['GrandTotal'];
+            $data2['payment_type'] = $request['payment_type'];
+            $data2['product_order_status'] = $request['product_order_status'];
+            $data1['create_by'] =Session::get('user_info_id');
+            $data1['create_date'] =$this->getDates();
+            $data1['update_by'] = "N";
+            $data1['update_date'] = "N";
+
+            $result = DB::table('product_order')->insert($data1);
+
+
+            $product_id = $request['product_id'];
+            $product_brcode = $request['product_brcode'];
+
             $data2 = array();
             for ($x = 0; $x < count($product_id); $x++) {
 
-                $data1['invoice_no'] = $invoice_no;
-                $data1['product_id'] = $product_id[$x];
-                $product_brcode11= $product_brcode[$x];
-                $data1['product_brcode'] = $product_brcode[$x];
-                $data1['customer_info_id'] = $customer_id;
-                $data1['qty'] = $qnty[$x];
-                $data1['sell_price'] = $total_cost[$x];
-                $data1['other_price'] = $total_cost[$x];
-                $data1['create_by'] =Session::get('user_info_id');
-                $data1['create_date'] =$this->getDates();
-                $data1['update_by'] = "N";
-                $data1['update_date'] = "N";
-
                 $data2['invoice_no'] = $invoice_no;
-                $data2['discount_price'] = $discount_price;
-                $data2['recive_amount'] =$ReceiveAmount;
-                $data2['grand_total'] = $GrandTotal;
-                $data2['deu_amount'] = $DeuAmount;
-                $data2['payment_type'] = $request['payment_type'];
-                $data2['product_order_status'] = $request['product_order_status'];
+                $data2['product_id'] = $product_id[$x];
+                $data2['bar_code'] = $product_brcode[$x];
                 $data2['create_by'] =Session::get('user_info_id');
                 $data2['create_date'] =$this->getDates();
                 $data2['update_by'] = "N";
                 $data2['update_date'] = "N";
 
-                $result = DB::table('product_order')->insert($data1);
                 $result1 = DB::table('product_order_invoice')->insert($data2);
 
                 $data11 = array();
                 $data11['sell_status'] = "0";
 
                 DB::table('product_stock_dtl')
-                    ->where('product_brcode', $product_brcode11)
+                    ->where('product_brcode', $product_brcode[$x])
                     ->update($data11);
             }
 

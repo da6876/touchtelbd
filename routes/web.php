@@ -69,3 +69,11 @@ Route::post("PlaceOrder","RegulerSellController@saveOrderData");
 Route::get('/get/all/ProductList','RegulerSellController@getAllProductInfoForSell')->name('all.ProductList');
 Route::get('/get/all/LastSellInfo','RegulerSellController@getLastSellInfo')->name('all.LastSellInfo');
 Route::get('CashMemo/{invoiceNo}','RegulerSellController@indexs');
+
+Route::get('CashMemoSearch','RegulerSellController@invoicesearch');
+Route::post('/autocomplete/searchInvoiceByNo', 'RegulerSellController@searchInvoiceByNo')->name('autocomplete.searchInvoiceByNo');
+
+
+Route::get('StockDetails','ProductStockController@getStockInfoDetails');
+Route::get('InvoiceSearch','RegulerSellController@invoiceSearchIN');
+Route::post('/autocomplete/searchInvoiceByNoIn', 'RegulerSellController@searchInvoiceByNoIn')->name('autocomplete.searchInvoiceByNoIn');

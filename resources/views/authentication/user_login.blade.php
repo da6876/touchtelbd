@@ -40,7 +40,8 @@
                             <h3><i class="fa fa-hand-pointer-o"></i> User Login Here</h3>
                         </div>
 
-                        <div class="card-body UserLogin">
+                        <div class="card-body UserLogin text-center" >
+                            <img src="{{asset('public/assets/img/touchtel.png')}}" width="150px">
                             <div class="alert alert-success text-center" role="alert">
                                 <h5 class="alert-heading">Welcome To-<b>TouchTel</b> Login Panel</h5>
                             </div>

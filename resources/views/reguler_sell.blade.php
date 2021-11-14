@@ -154,12 +154,21 @@
                                         <tfoot>
                                         <tr>
 
-                                            <td class="col-md-6" colspan="3"><b>Grand Total</b></td>
+                                            <td class="col-md-6" colspan="3"><b>Installation /Service Charges </b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control" name="GrandTotal" id="GrandTotal"
-                                                       type="text" readonly>
+                                                <input class="form-control other_prices" value="0.00" name="other_price" id="other_price" type="number">
                                             </td>
                                         </tr>
+                                        <tr>
+
+                                            <td class="col-md-6" colspan="3"><b>Discount Amount </b></td>
+                                            <td class="col-md-2" colspan="2">
+                                                <input class="form-control discount_prices" value="0.00"
+                                                       name="discount_price" id="discount_price"
+                                                       type="number">
+                                            </td>
+                                        </tr>
+
                                         <tr>
 
                                             <td class="col-md-6" colspan="3"><b>Receive Amount </b></td>
@@ -171,20 +180,11 @@
                                         </tr>
                                         <tr>
 
-                                            <td class="col-md-6" colspan="3"><b>Discount Amount </b></td>
+                                            <td class="col-md-6" colspan="3"><b>Grand Total</b></td>
                                             <td class="col-md-2" colspan="2">
-                                                <input class="form-control AmountReceive" value="0.00"
-                                                       name="discount_price" id="discount_price"
-                                                       type="number">
-                                            </td>
-                                        </tr>
-                                        <tr>
-
-                                            <td class="col-md-6" colspan="3"><b>Service Charge </b></td>
-                                            <td class="col-md-2" colspan="2">
-                                                <input class="form-control AmountReceive" value="0.00"
-                                                       name="other_price" id="other_price"
-                                                       type="number">
+                                                <input name="GrandTotal" id="GrandTotalH" type="hidden">
+                                                <input class="form-control" name="GrandTotal" id="GrandTotal"
+                                                       type="text" readonly>
                                             </td>
                                         </tr>
                                         <tr>
@@ -197,42 +197,45 @@
                                         </tr>
                                         <tr>
 
-                                            <td class="col-md-6" colspan="2">
-                                                <label>Status</label>
-                                                <select name="payment_type" id="payment_type"
-                                                        class="form-control">
-                                                    <option value="S">Payment Method</option>
-                                                    <option value="Cash">Cash</option>
-                                                    <option value="Checks">Checks</option>
-                                                    <option value="Debit cards">Debit cards</option>
-                                                    <option value="Credit cards">Credit cards</option>
-                                                    <option value="Credit cards">Credit cards</option>
-                                                    <option value="Mobile payments">Mobile payments</option>
-                                                </select>
-                                            </td>
-                                            <td class="col-md-6" colspan="2">
-                                                <label>Status</label>
-                                                <select name="product_order_status" id="product_order_status"
-                                                        class="form-control">
-                                                    <option value="S">Payment Status</option>
-                                                    <option value="Paid">Paid</option>
-                                                    <option value="UnPaid">UnPaid</option>
-                                                    <option value="Due">Due</option>
-                                                </select>
+                                            <td class="col-md-6" colspan="3"><b>Net Payable Amount </b></td>
+                                            <td class="col-md-2" colspan="2">
+                                                <input class="form-control" name="PayableAmount" id="PayableAmount"
+                                                       type="number" readonly>
                                             </td>
                                         </tr>
 
                                         </tfoot>
                                     </table>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Payment Method</label>
+                                            <select name="payment_type" id="payment_type"
+                                                    class="form-control">
+                                                <option value="">Payment Method</option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Checks">Checks</option>
+                                                <option value="Debit cards">Debit cards</option>
+                                                <option value="Credit cards">Credit cards</option>
+                                                <option value="Mobile payments">Mobile payments</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Payment Status</label>
+                                            <select name="product_order_status" id="product_order_status"
+                                                    class="form-control">
+                                                <option value="">Payment Status</option>
+                                                <option value="Paid">Paid</option>
+                                                <option value="UnPaid">UnPaid</option>
+                                                <option value="Due">Due</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
 
                                     <button type="button" onclick="confrimOrder()"
-                                            class="btn btn-info col-md-3 pull-right">
+                                            class="btn btn-info col-md-12">
                                         Confirm Order
-                                    </button>
-
-                                    <button type="button" onclick="showal('ZIYNB1K')"
-                                            class="btn btn-info col-md-3 pull-right">
-                                        Confirm Orderaaa
                                     </button>
                                 </form>
 
@@ -497,39 +500,9 @@
         $('#customer_id').val(id);
         $('#countryList').fadeOut();
         document.getElementById('invoice_no').value = makeid();
-
-
-    }
-
-    var i = 0;
-
-    function showProductData(id, name, price, ime, color) {
-        $('.noItemHere').hide();
-        $('#productStock').append('' +
-            '' +
-            '<tr id="row' + i + '" class="dynamic-added">' +
-            '<td>' +
-            '<label>' + name + '<br> IME : ' + ime + '<br>Color : ' + color + '</label>' +
-            '</td>' +
-            '<td>' +
-            '<input name="product_price[]" id="product_price_' + i + '"  class="form-control product_price" value="' + price + '" for="' + i + '" readonly/>' +
-            '</td>' +
-            '<td>' +
-            '<input name="qnty[]" id="quantity_' + i + '" type="number" class="form-control quantity" value="0" for="' + i + '"/>' +
-            '</td>' +
-            '<td>' +
-            '<input name="total_cost[]" id="total_cost_' + i + '"  class="form-control total_cost" value="0.0" for="' + i + '" readonly/>' +
-            '</td>' +
-            '<td>' +
-            '<button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove"><i class="fa fa-trash-o" aria-hidden="true" ></i></button>' +
-            '</td>' +
-            '</tr>' +
-            '');
-        i++;
     }
 
     $(document).on('click', '.btn_remove', function () {
-        alert($(this).attr("id"));
         var button_id = $(this).attr("id");
         $('#row' + button_id + '').remove();
         calculateSubTotal();
@@ -539,26 +512,6 @@
         getTotalCost($(this).attr("for"));
     });
 
-    $("#productStock").on('input', 'input.AmountReceive', function () {
-        var TotalPrice = $('#GrandTotal').val();
-        var GivenMoney = $('#ReceiveAmount').val();
-        var discount_price = $('#discount_price').val();
-        if (TotalPrice != "" && GivenMoney != "") {
-            var DueAmount = TotalPrice - GivenMoney;
-            $('#DeuAmount').val(DueAmount.toFixed(2));
-            if (discount_price <= DueAmount) {
-                DueAmount = DueAmount - discount_price;
-                $('#DeuAmount').val(DueAmount.toFixed(2));
-            }
-        } else {
-            swal({
-                title: "Oops",
-                text: "Please Add A Product And Enter The Given Money",
-                timer: '2500'
-            });
-            $('#ReceiveAmount').val('0.0')
-        }
-    });
 
     // Using a new index rather than your global variable i
     function getTotalCost(ind) {
@@ -575,73 +528,108 @@
         $('.total_cost').each(function () {
             subtotal += parseFloat($(this).val());
         });
+        $('#GrandTotalH').val(subtotal);
         $('#GrandTotal').val(subtotal.toFixed(2));
     }
+
+
+    $("#productStock").on('input', function () {
+        other_price = $('#other_price').val();
+        GrandTotal = $('#GrandTotalH').val();
+        discount_price = $('#discount_price').val();
+
+
+        if (other_price != "" && GrandTotal != "" && discount_price != "") {
+            GrandTotalssss = (parseInt(GrandTotal) + parseInt(other_price));
+            GrandTotalssss = (parseInt(GrandTotalssss) - parseInt(discount_price));
+            $('#GrandTotal').val(GrandTotalssss.toFixed(2));
+        }
+
+        ReceiveAmount = $('#ReceiveAmount').val();
+        GrandTotals = $('#GrandTotal').val();
+        if (ReceiveAmount != "" && GrandTotals != "") {
+            DewAmount = (parseInt(GrandTotals) - parseInt(ReceiveAmount));
+            $('#DeuAmount').val(DewAmount.toFixed(2));
+        }
+
+        $('#PayableAmount').val(GrandTotalssss.toFixed(2));
+    });
+
 
     var postURL = "<?php echo url('PlaceOrder'); ?>";
     var postURL11 = "<?php echo url('CashMemo/ZIYNB1K'); ?>";
 
     function confrimOrder() {
+        var GrandTotal = $('#GrandTotalH').val();
+        ;
         var customer_name = $('#customer_name').val();
         var customer_id = $('#customer_id').val();
         var ReceiveAmount = $('#ReceiveAmount').val();
         var payment_type = $('#payment_type').val();
         var product_order_status = $('#product_order_status').val();
-        if (customer_id != "" && customer_name != "") {
-            if (ReceiveAmount != "") {
-                if (payment_type != "") {
-                    if (product_order_status != "") {
-                        $.ajax({
-                            url: postURL,
-                            method: "POST",
-                            data: $('#orderConfirm').serialize(),
-                            type: 'json',
-                            success: function (data) {
-                                console.log(data);
-                                var dataResult = JSON.parse(data);
-                                if (dataResult.statusCode == 200) {
+        if (GrandTotal != "") {
+            if (customer_id != "" && customer_name != "") {
+                if (ReceiveAmount != "") {
+                    if (payment_type != "") {
+                        if (product_order_status != "") {
+                            $.ajax({
+                                url: postURL,
+                                method: "POST",
+                                data: $('#orderConfirm').serialize(),
+                                type: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    var dataResult = JSON.parse(data);
+                                    if (dataResult.statusCode == 200) {
 
-                                    $('.dynamic-added').remove();
-                                    $('#orderConfirm')[0].reset();
-                                    swal("Success", dataResult.statusMsg).then(function () {
-                                        var postURL1 = "{{ url('CashMemo') }}" + '/' + dataResult.invoice_no;
-                                        window.location = postURL1;
-                                    });
-                                } else {
-                                    swal({
-                                        title: "Oops",
-                                        text: "Bulk Data Insert Failed",
-                                        icon: "error",
-                                        timer: '1500'
-                                    });
+                                        $('.dynamic-added').remove();
+                                        $('#orderConfirm')[0].reset();
+                                        swal("Success", dataResult.statusMsg).then(function () {
+                                            var postURL1 = "{{ url('CashMemo') }}" + '/' + dataResult.invoice_no;
+                                            window.location = postURL1;
+                                        });
+                                    } else {
+                                        swal({
+                                            title: "Oops",
+                                            text: "Bulk Data Insert Failed",
+                                            icon: "error",
+                                            timer: '1500'
+                                        });
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            swal({
+                                title: "Oops",
+                                text: "Select Payment Status!!",
+                                timer: '2500'
+                            });
+                        }
                     } else {
                         swal({
                             title: "Oops",
-                            text: "Select Payment Status!!",
+                            text: "Select Payment Type !!",
                             timer: '2500'
                         });
                     }
                 } else {
                     swal({
                         title: "Oops",
-                        text: "Select Payment Type !!",
+                        text: "Please Enter The Receive Amount !!",
                         timer: '2500'
                     });
                 }
             } else {
                 swal({
                     title: "Oops",
-                    text: "Please Enter The Receive Amount !!",
+                    text: "Please Select A Customer",
                     timer: '2500'
                 });
             }
         } else {
             swal({
                 title: "Oops",
-                text: "Please Select A Customer",
+                text: "Please Add A Product",
                 timer: '2500'
             });
         }

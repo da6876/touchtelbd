@@ -43,7 +43,6 @@ class ProductStockController extends Controller
         }
     }
 
-
     public function create()
     {
         //
@@ -85,6 +84,7 @@ class ProductStockController extends Controller
             $dataMST['qty'] = $request['qnty'];
             $dataMST['product_stock_status'] = $request['product_stock_status'];
             $dataMST['create_by'] = Session::get('user_info_id');
+            $dataMST['create_date'] = $this->getDates();
             $dataMST['update_by'] = "N";
             $dataMST['primaryvalue'] = $request['primaraynumber'];
             $result = DB::table('product_stock_mst')->insert($dataMST);
@@ -111,6 +111,7 @@ class ProductStockController extends Controller
                         $data['product_brcode'] = $product_brcode[$x];
                         $data['product_imei'] = $product_imei[$x];
                         $data['create_by'] = Session::get('user_info_id');
+                        $data['create_date'] = $this->getDates();
                         $data['update_by'] = "N";
                         $data['sell_status'] = "1";
                         $resultDtl= DB::table('product_stock_dtl')->insert($data);
@@ -137,23 +138,6 @@ class ProductStockController extends Controller
                     "statusMsg" => "Failed To add Product Stock!!"
                 ));
             }
-
-            /*$data = array();
-            for ($x = 0; $x < count($product_id); $x++) {
-                $data['product_id'] = $product_id[$x];
-                $data['company_id'] = $company_id[$x];
-                $data['invice_no'] = $invice_no[$x];
-                $data['shot_decs'] = $shot_decs[$x];
-                $data['qty'] = $qty[$x];
-                $data['product_stock_status'] = $product_stock_status[$x];
-                $data['create_by'] = Session::get('user_info_id');
-                $data['update_by'] = "N";
-                $result = DB::table('product_stock_mst')->insert($data);
-            }
-            return json_encode(array(
-                "statusCode" => 200,
-                "statusMsg" => "Product Stock Info Added Successfully"
-            ));*/
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -229,7 +213,6 @@ class ProductStockController extends Controller
 
     }
 
-
     public function destroy($id)
     {
         DB::table('product_stock')
@@ -245,12 +228,13 @@ class ProductStockController extends Controller
 
         $product_stock = DB::select('SELECT PSM.product_stock_mst_id, PSM.product_id,PI.product_name, 
                                     PSM.company_id,CI.company_name,PSM.invice_no,PSM.qty,
-                                    (Select count(sell_status) from product_stock_dtl where product_id=PSM.product_id AND sell_status=1 ) as avalable_qty
+                                    (Select count(sell_status) from product_stock_dtl where product_id=PSM.product_id AND invice_no=PSM.invice_no AND sell_status=1 ) as avalable_qty
                                     FROM product_stock_mst PSM,product_stock_dtl PSD,company_info CI,product_info PI
                                     WHERE PSM.invice_no =PSD.invice_no
                                     AND PSM.company_id = CI.company_id
                                     AND PSM.product_id = PI.product_id
-                                    GROUP BY PSM.product_id;');
+                                    GROUP BY PSM.product_id,PSM.invice_no
+                                    ORDER BY PSM.product_stock_mst_id;');
        // return json_encode($product_stock);
         return DataTables::of($product_stock)
             ->addColumn('action', function ($product_stock) {
@@ -265,9 +249,30 @@ class ProductStockController extends Controller
             ->toJson();
 
     }
+
+    public function getStockInfoDetails(){
+        $DetailsStock =  DB::select("SELECT PSM.product_stock_mst_id, PSM.product_id,PI.product_name, 
+                                    PSM.company_id,CI.company_name,PSM.invice_no,PSM.qty,
+                                    (Select count(sell_status) from product_stock_dtl where product_id=PSM.product_id AND invice_no=PSM.invice_no AND sell_status=1 ) as avalable_qty,
+                                    UI.user_name,PSM.create_by,PSM.create_date
+                                    FROM product_stock_mst PSM,product_stock_dtl PSD,company_info CI,product_info PI,user_info UI
+                                    WHERE PSM.invice_no =PSD.invice_no
+                                    AND PSM.company_id = CI.company_id
+                                    AND PSM.product_id = PI.product_id
+                                    AND PSM.create_by = UI.user_info_id
+                                    GROUP BY PSM.product_id,PSM.invice_no
+                                    ORDER BY PSM.product_stock_mst_id;");
+
+        return view('report.stock_report')->with('DetailsStock', $DetailsStock);
+    }
+
+
+    public function getDates()
+    {
+        $Date = "";
+        date_default_timezone_set("Asia/Dhaka");
+        return $Date = date("d/m/Y");
+    }
 }
 
-/*
-<a onclick="showproduct_stockData(' . $product_stock->product_stock_id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="fa fa-external-link-square bigfonts"></i></a>
-                    <a onclick="editproduct_stockData(' . $product_stock->product_stock_id . ')" role="button" href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit bigfonts"></i></a>
-                    */
+

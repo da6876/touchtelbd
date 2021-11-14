@@ -105,17 +105,18 @@
                                                                                             <li><strong>Invoice </strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;#{{$invoice_no}}</li>
                                                                                             <li><strong>Invoice Date</strong> &nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{$create_Date}}</li>
                                                                                             <li><strong>Invoice By</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{$create_by}}</li>
-                                                                                            <li><strong>Status</strong><span class="text-black-50">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;UNPAID</span>
+                                                                                            <li><strong>Status</strong><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{$product_order_status}}</span>
+                                                                                            <li><strong>Pay Type</strong><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{$payment_type}}</span>
                                                                                             </li>
                                                                                         </ul>
                                                                                     </div>
                                                                                     <div class="col-md-3">
                                                                                         <ul class="list-unstyled">
                                                                                             <li><strong>Invoiced To</strong></li>
-                                                                                            <li><strong>Name</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{$customer_name}} </li>
-                                                                                            <li><strong>Phone</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$customer_phone}} </li>
-                                                                                            <li><strong>Email</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{$customer_email}}</li>
-                                                                                            <li><strong>Address</strong>&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{$customer_address}}</li>
+                                                                                            <li><strong>Name</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{$customer_name}} </li>
+                                                                                            <li><strong>Phone</strong>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{$customer_phone}} </li>
+                                                                                            <li><strong>Email</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{$customer_email}}</li>
+                                                                                            <li><strong>Address</strong>&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{$customer_address}}</li>
                                                                                         </ul>
                                                                                     </div>
                                                                                 </div>
@@ -133,6 +134,7 @@
                                                                             <th class="per10 text-center">Amount</th>
                                                                         </tr>
                                                                         <?php
+                                                                        $sub_total= 0;
                                                                         $size = count($product_id);
                                                                         for ($x = 0; $x < $size; $x++) { ?>
 
@@ -140,12 +142,19 @@
                                                                             {{--
                                                                                                                                                         <td>{{$x}}</td>
                                                                             --}}
-                                                                            <td>{{$product_name[$x]}}</td>
-                                                                            <td class="text-center">{{$qty[$x]}}</td>
+                                                                            <td>
+                                                                                Name : {{$product_name[$x]}}<br>
+                                                                                IMEI : {{$product_imei[$x]}}<br>
+                                                                                Color : {{$color[$x]}}<br>
+                                                                            </td>
+                                                                            <td class="text-center">1</td>
+                                                                            @php
+                                                                            $sub_total= $sub_total+ $sell_price[$x];
+                                                                            @endphp
                                                                             <td class="text-center">{{$sell_price[$x]}}
                                                                                 TK
                                                                             </td>
-                                                                            <td class="text-center">{{$qty[$x] * $sell_price[$x]}}
+                                                                            <td class="text-center">{{$sell_price[$x]}}
                                                                                 TK
                                                                             </td>
                                                                         </tr>
@@ -154,27 +163,30 @@
                                                                         </tbody>
                                                                         <tfoot>
                                                                         <tr>
-                                                                            <th colspan="3" class="text-right">Total
-                                                                                Amount :
-                                                                            </th>
-                                                                            <th class="text-center">{{ ($GRANT_total != 0) ? $GRANT_total : '0.0'}} TK</th>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th colspan="3" class="text-right">Add
-                                                                                Vat:
-                                                                            </th>
-                                                                            <th class="text-center">{{($GRANT_vat_amount != 0) ? $GRANT_vat_amount : '0.0'}} TK</th>
+                                                                            <th colspan="3" class="text-right">Sub Amount : </th>
+
+                                                                            <th class="text-center">{{ $sub_total}} TK</th>
                                                                         </tr>
                                                                         <tr>
                                                                             <th colspan="3" class="text-right">Add
                                                                                 Installation /Service Charges:
                                                                             </th>
-                                                                            <th class="text-center">{{($GRANT_other_price != 0) ? $GRANT_other_price : '0.0'}} TK</th>
+                                                                            <th class="text-center">{{($service_price != 0) ? $service_price : '0.0'}} TK</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th colspan="3" class="text-right">
+                                                                                Discount Amount:
+                                                                            </th>
+                                                                            <th class="text-center">{{($discount_price != 0) ? $discount_price : '0.0'}} TK</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th colspan="3" class="text-right">Dew Amount : </th>
+                                                                            <th class="text-center">{{($deu_amount != 0) ? $deu_amount : '0.0'}} TK</th>
                                                                         </tr>
                                                                         <tr>
                                                                             <th colspan="3" class="text-right">Net Payable Amount:
                                                                             </th>
-                                                                            <th class="text-center">{{$GRANT_total + $GRANT_vat_amount + $GRANT_other_price}} USD</th>
+                                                                            <th class="text-center">{{ ($grand_total != 0) ? $grand_total : '0.0'}}</th>
                                                                         </tr>
                                                                         </tfoot>
                                                                     </table>

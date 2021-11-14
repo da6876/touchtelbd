@@ -52,8 +52,9 @@ $userType = Session::get('user_type_id');
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-list-ol bigfonts"></i> <span>Report </span> <span class="menu-arrow"></span></a>
                         <ul class="list-unstyled" >
-                            <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Reguler Sell Report</a></li>
-                            <li class=""><a href="#"><i class="fa fa-file-text bigfonts"></i> Stock Report</a></li>
+                            <li class=""><a href="{{url('CashMemoSearch')}}"><i class="fa fa-file-text-o bigfonts"></i>Cash Memo Search</a></li>
+                            <li class=""><a href="{{url('InvoiceSearch')}}"><i class="fa fa-file-text-o bigfonts"></i>Invoice Search</a></li>
+                            <li class=""><a href="{{url('StockDetails')}}"><i class="fa fa-file-text bigfonts"></i> Stock Report</a></li>
                             <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Product Report</a></li>
                             <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Invoice Report</a></li>
                         </ul>
@@ -106,10 +107,11 @@ $userType = Session::get('user_type_id');
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-list-ol bigfonts"></i> <span>Report </span> <span class="menu-arrow"></span></a>
                         <ul class="list-unstyled" >
-                            <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Reguler Sell Report</a></li>
-                            <li class=""><a href="#"><i class="fa fa-file-text bigfonts"></i> Stock Report</a></li>
-                            <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Product Report</a></li>
-                            <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Invoice Report</a></li>
+                            <li class=""><a href="{{url('CashMemoSearch')}}"><i class="fa fa-file-text-o bigfonts"></i>Cash Memo Search</a></li>
+                            <li class=""><a href="{{url('InvoiceSearch')}}"><i class="fa fa-file-text-o bigfonts"></i>Invoice Search</a></li>
+                            <li class=""><a href="{{url('StockDetails')}}"><i class="fa fa-file-text bigfonts"></i> Stock Report</a></li>
+                            {{--<li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Product Report</a></li>
+                            <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Invoice Report</a></li>--}}
                         </ul>
                     </li>
 
@@ -118,7 +120,6 @@ $userType = Session::get('user_type_id');
             @elseif($userType =='11110002')
 
                 <ul>
-
                     <li class="submenu">
                         <a class="" href="{{url('Home')}}"><i class="fa fa-fw fa-bars"></i><span> Dashboard </span> </a>
                     </li>
@@ -130,8 +131,9 @@ $userType = Session::get('user_type_id');
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-list-ol bigfonts"></i> <span>Report </span> <span class="menu-arrow"></span></a>
                         <ul class="list-unstyled" >
-                            <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Reguler Sell Report</a></li>
-                            <li class=""><a href="#"><i class="fa fa-file-text bigfonts"></i> Stock Report</a></li>
+                            <li class=""><a href="{{url('CashMemoSearch')}}"><i class="fa fa-file-text-o bigfonts"></i>Cash Memo Search</a></li>
+                            <li class=""><a href="{{url('InvoiceSearch')}}"><i class="fa fa-file-text-o bigfonts"></i>Invoice Search</a></li>
+                            <li class=""><a href="{{url('StockDetails')}}"><i class="fa fa-file-text bigfonts"></i> Stock Report</a></li>
                             <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Product Report</a></li>
                             <li class=""><a href="#"><i class="fa fa-file-text-o bigfonts"></i> Invoice Report</a></li>
                         </ul>
