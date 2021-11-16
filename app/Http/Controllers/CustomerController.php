@@ -35,39 +35,79 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = array();
-            $data['customer_name'] = $request['customer_name'];
-            $data['customer_phone'] = $request['customer_phone'];
-            $data['customer_email'] = $request['customer_email'];
-            $data['customer_address'] = $request['customer_address'];
-            $data['customer_status'] = $request['customer_status'];
-            $data['create_by'] = Session::get('user_name');;
 
-            $image_one = $request['customer_photo'];
-            if ($image_one) {
-                $ran_one = str_random(15);
-                $ext_one = strtolower($image_one->getClientOriginalExtension());
-                $one_full_name = $ran_one .'.'. $ext_one;
-                $upload_path_one = "allImages/ProductImages/";
-                $image_url_one = $upload_path_one . $one_full_name;
-                $success_one = $image_one->move($upload_path_one, $one_full_name);
+            if ($request['customer_id']=="") {
+                $data = array();
+                $data['customer_name'] = $request['customer_name'];
+                $data['customer_phone'] = $request['customer_phone'];
+                $data['customer_email'] = $request['customer_email'];
+                $data['customer_address'] = $request['customer_address'];
+                $data['customer_status'] = $request['customer_status'];
+                $data['create_by'] = Session::get('user_name');;
 
-                $data['customer_photo'] = $image_url_one;
-                $result = DB::table('customer_info')->insert($data);
-                return json_encode(array(
-                    "statusCode" => 200,
-                    "statusMsg" => "New Customer Added Successfully"
-                ));
-            } else {
-                $data['customer_photo'] = "No Image";
-                $result = DB::table('customer_info')->insert($data);
-                return json_encode(array(
-                    "statusCode" => 200,
-                    "statusMsg" => "New Customer Added Successfully"
-                ));
+                $image_one = $request['customer_photo'];
+                if ($image_one) {
+                    $ran_one = str_random(15);
+                    $ext_one = strtolower($image_one->getClientOriginalExtension());
+                    $one_full_name = $ran_one . '.' . $ext_one;
+                    $upload_path_one = "allImages/ProductImages/";
+                    $image_url_one = $upload_path_one . $one_full_name;
+                    $success_one = $image_one->move($upload_path_one, $one_full_name);
+
+                    $data['customer_photo'] = $image_url_one;
+                   $result = DB::table('customer_info')->insert($data);
+                    return json_encode(array(
+                        "statusCode" => 200,
+                        "statusMsg" => "New Customer Added Successfully "
+                    ));
+                } else {
+                    $data['customer_photo'] = "No Image";
+                    $result = DB::table('customer_info')->insert($data);
+                    return json_encode(array(
+                        "statusCode" => 200,
+                        "statusMsg" => "New Customer Added Successfully"
+                    ));
+                }
+
+            }else{
+                $data = array();
+                $data['customer_name'] = $request['customer_name'];
+                $data['customer_phone'] = $request['customer_phone'];
+                $data['customer_email'] = $request['customer_email'];
+                $data['customer_address'] = $request['customer_address'];
+                $data['customer_status'] = $request['customer_status'];
+                $data['update_info'] = Session::get('user_info_id');
+
+                $image_one = $request['customer_photo'];
+                if ($image_one) {
+                    $ran_one = str_random(15);
+                    $ext_one = strtolower($image_one->getClientOriginalExtension());
+                    $one_full_name = $ran_one . '.' . $ext_one;
+                    $upload_path_one = "allImages/ProductImages/";
+                    $image_url_one = $upload_path_one . $one_full_name;
+                    $success_one = $image_one->move($upload_path_one, $one_full_name);
+
+                    $data['customer_photo'] = $image_url_one;
+
+                    DB::table('customer_info')
+                        ->where('customer_info_id', $request['customer_id'])
+                        ->update($data);
+
+                    return json_encode(array(
+                        "statusCode" => 200,
+                        "statusMsg" => "Customer Updated Successfully"
+                    ));
+                } else {
+                    $data['customer_photo'] = "No Image";
+                    DB::table('customer_info')
+                        ->where('customer_info_id', $request['customer_id'])
+                        ->update($data);
+                    return json_encode(array(
+                        "statusCode" => 200,
+                        "statusMsg" => "Customer Updated Successfully"
+                    ));
+                }
             }
-
-
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -85,9 +125,11 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
+        $data['customer_status']="D";
         DB::table('customer_info')
             ->where('customer_info_id', $id)
-            ->delete();
+            ->update($data);
+
         return json_encode(array(
             "statusCode" => 200
         ));
@@ -96,8 +138,7 @@ class CustomerController extends Controller
     public function getAllCustomer()
     {
 
-        $categories = DB::table('customer_info')
-            ->get();
+        $categories = DB::select('SELECT customer_info_id,customer_name,customer_phone,customer_email,customer_photo,customer_address, create_by,create_date,update_info,customer_status FROM customer_info WHERE customer_status= "Active";');
 
         return DataTables::of($categories)
             ->addColumn('action', function ($categories) {

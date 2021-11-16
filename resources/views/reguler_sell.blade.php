@@ -47,33 +47,7 @@
 
                 <div class="row">
 
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3><i class="fa fa-users"></i> Order Process</h3>
-                            </div>
-
-                            <div class="card-body">
-
-                                <hr>
-                                <table class="table" id="ProductsdataTabel">
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div><!-- end card-->
-                    </div>
-
-
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="card mb-3">
                             <div class="card-header">
                                 <h3><i class="fa fa-star-o"></i> Order progress</h3>
@@ -465,9 +439,7 @@
         });
     });
 
-</script>
 
-<script>
     function makeid() {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -476,17 +448,6 @@
         return text;
     }
 
-    var grandTotal = 0.0;
-    var table1 = $('#ProductsdataTabel').DataTable({
-        "processing": true,
-        "serverSide": true,
-        searching: false,
-        ajax: '{!! route('all.ProductList') !!}',
-        columns: [
-            {data: 'name', name: 'name'},
-            {data: 'action', name: 'action'}
-        ]
-    });
 
     setInterval(function () {
         table1.ajax.reload();
@@ -532,7 +493,6 @@
         $('#GrandTotal').val(subtotal.toFixed(2));
     }
 
-
     $("#productStock").on('input', function () {
         other_price = $('#other_price').val();
         GrandTotal = $('#GrandTotalH').val();
@@ -554,7 +514,6 @@
 
         $('#PayableAmount').val(GrandTotalssss.toFixed(2));
     });
-
 
     var postURL = "<?php echo url('PlaceOrder'); ?>";
     var postURL11 = "<?php echo url('CashMemo/ZIYNB1K'); ?>";
@@ -641,7 +600,6 @@
             window.location = postURL1;
         })
     }
-
 
     function clearfrom() {
         $('.categoriesAdd form')[0].reset();

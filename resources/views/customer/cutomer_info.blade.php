@@ -53,7 +53,6 @@
                         <div class="card mb-3">
                             <div class="card-header">
                                 <span class="pull-right">
-{{--                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target=".categoriesAdd">--}}
                                     <button class="btn btn-primary btn-sm" onclick="clearfrom()">
                                     <i class="fa fa-plus-square bigfonts"></i> Add New Categories</button>
                                 </span>
@@ -78,6 +77,7 @@
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Customer Name</label>
+                                                                <input id="customer_info_id" name="customer_id" type="hidden">
                                                                 <input class="form-control" id="customer_name" name="customer_name" type="text">
                                                             </div>
                                                         </div>
@@ -210,6 +210,7 @@
 
         $('.categoriesAdd form')[0].reset();
 
+        document.getElementById('customer_info_id').disabled = false;
         document.getElementById('customer_name').disabled = false;
         document.getElementById('customer_phone').disabled = false;
         document.getElementById('customer_email').disabled = false;
@@ -267,15 +268,11 @@
                 $('.categoriesAdd').modal('show');
                 $('.categoriesAdd form')[0].reset();
                 $('.modal-titles').text(data[0].customer_name + ' Information');
+                $('#customer_info_id').val(data[0].customer_info_id);
                 $('#customer_name').val(data[0].customer_name);
                 $('#customer_phone').val(data[0].customer_phone);
                 $('#customer_email').val(data[0].customer_email);
                 $('#customer_address').val(data[0].customer_address);
-                document.getElementById('customer_name').disabled = true;
-                document.getElementById('customer_phone').disabled = true;
-                document.getElementById('customer_email').disabled = true;
-                document.getElementById('customer_address').disabled = true;
-                $('#customer_status').attr('disabled', 'disabled');
                 $('#customer_status option[value="' + data[0].customer_status + '"]').prop('selected', true);
                 $('#btnUpdate').hide();
 
@@ -290,30 +287,6 @@
         });
     }
 
-    //Edit User Type Data By Ajax
-    function editcategoriesData(id) {
-
-        $.ajax({
-            url: "{{ url('CategoriesInfo') }}" + '/' + id,
-            type: "GET",
-            dataType: "JSON",
-            success: function (data) {
-                $('.showCategoriesData').modal('show');
-                $('.modal-titles').text(data[0].categories_name + ' Information');
-                $('#categories_name').val(data[0].categories_name);
-                $('#Statuss option[value="' + data[0].categories_status + '"]').prop('selected', true);
-                document.getElementById('categories_name').disabled = false;
-                $('#Statuss').prop('disabled', false);
-            }, error: function () {
-                swal({
-                    title: "Oops",
-                    text: "aa",
-                    icon: "error",
-                    timer: '1500'
-                });
-            }
-        });
-    }
 
     //Delete User Type Data By Ajax
     function  deletecategoriesData(id) {

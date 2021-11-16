@@ -88,9 +88,12 @@ class ProductTypeController extends Controller
     public function destroy($id)
     {
         try {
+
+            $data['product_type_status'] = "D";
+
             DB::table('product_type')
                 ->where('product_type_id', $id)
-                ->delete();
+                ->update($data);
             return json_encode(array(
                 "statusCode" => 200
             ));
@@ -106,8 +109,8 @@ class ProductTypeController extends Controller
     public function getAllProductType()
     {
 
-        $ProductType = DB::table('product_type')
-            ->get();
+        $ProductType = DB::select('SELECT product_type_id,product_type_name,product_type_status,create_info FROM product_type WHERE product_type_status = "A"');
+
 
         return DataTables::of($ProductType)
             ->addColumn('action', function ($ProductType) {

@@ -20,7 +20,7 @@ $userType = Session::get('user_type_id');
                     </li>
 
                     <li class="submenu">
-                        <a href="{{url('RegulerSell')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span> <span class="menu-arrow"></span></a>
+                        <a href="{{url('RegulerSell')}}" class=""><i class="fa fa-users bigfonts"></i> <span> Regular Sell </span></a>
                     </li>
                     <li class="submenu">
                         <a href="#" class=""><i class="fa fa-gift bigfonts"></i> <span>Product Setup</span> <span class="menu-arrow"></span></a>
@@ -61,7 +61,7 @@ $userType = Session::get('user_type_id');
                     </li>
 
                     <li class="submenu">
-                        <a href="{{url('PasswordCheck')}}" class=""><i class="fa fa-users bigfonts"></i> <span>Check Password </span> <span class="menu-arrow"></span></a>
+                        <a href="{{url('PasswordCheck')}}" class=""><i class="fa fa-key" aria-hidden="true"></i> <span>Check Password </span></a>
                     </li>
 
                 </ul>

@@ -10,11 +10,21 @@ use Session;
 
 class ProductStockController extends Controller
 {
+    public function AuthCheck()
+    {
+        $name = Session::get('user_name');
+        if ($name) {
+            return;
+        } else {
+            return Redirect::to('Login')->send();;
+        }
+    }
+
     public function index()
     {
         try {
             DB::connection()->getPdo();
-            return view('productstock.product_stock');
+            return view('productstock.product_stock_bulk');
         } catch (\Exception $e) {
 
             return view('errorpage.database_error');
@@ -43,9 +53,25 @@ class ProductStockController extends Controller
         }
     }
 
-    public function create()
-    {
-        //
+    public function seeStockDetails($masterId){
+        $this->AuthCheck();
+
+        try {
+
+            $stockDetails = DB::select("SELECT PSD.product_stock_dtl_id, PSD.product_id,PI.product_name, PSD.invice_no,PSD.color,PSD.unit_price,PSD.sell_price,
+PSD.product_brcode, PSD.product_imei,PSD.create_by,PSD.create_date, PSD.update_by, PSD.create_info,UI.user_name, PSD.update_info,
+PSD.sell_status FROM product_stock_dtl PSD, product_info PI,user_info UI
+WHERE invice_no ='$masterId'
+AND PSD.product_id=PI.product_id
+AND PSD.create_by=UI.user_info_id;");
+
+
+            return view('productstock.product_stock_details')
+                ->with('stockDetails', $stockDetails);
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function showProductList()
@@ -213,15 +239,6 @@ class ProductStockController extends Controller
 
     }
 
-    public function destroy($id)
-    {
-        DB::table('product_stock')
-            ->where('product_stock_id', $id)
-            ->delete();
-        return json_encode(array(
-            "statusCode" => 200
-        ));
-    }
 
     public function getAllStockInfo()
     {
@@ -240,7 +257,7 @@ class ProductStockController extends Controller
             ->addColumn('action', function ($product_stock) {
                 $buttton = '
                 <div class="button-list">
-                    <a onclick="deleteStockData(' . $product_stock->product_stock_mst_id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-o bigfonts"></i></a>
+                    <a onclick="showDetals('."'$product_stock->invice_no'".')" role="button" href="#" class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 </div>
                 ';
                 return $buttton;
@@ -266,12 +283,45 @@ class ProductStockController extends Controller
         return view('report.stock_report')->with('DetailsStock', $DetailsStock);
     }
 
+    public function destroy($id)
+    {
+        DB::table('product_stock_dtl')
+            ->where('product_stock_dtl_id', $id)
+            ->delete();
+
+        return json_encode(array(
+            "statusCode" => 200
+        ));
+    }
 
     public function getDates()
     {
         $Date = "";
         date_default_timezone_set("Asia/Dhaka");
         return $Date = date("d/m/Y");
+    }
+
+
+
+    public function seeStockDetailsReport($masterId){
+        $this->AuthCheck();
+
+        try {
+
+            $stockDetails = DB::select("SELECT PSD.product_stock_dtl_id, PSD.product_id,PI.product_name, PSD.invice_no,PSD.color,PSD.unit_price,PSD.sell_price,
+PSD.product_brcode, PSD.product_imei,PSD.create_by,PSD.create_date, PSD.update_by, PSD.create_info,UI.user_name, PSD.update_info,
+PSD.sell_status FROM product_stock_dtl PSD, product_info PI,user_info UI
+WHERE invice_no ='$masterId'
+AND PSD.product_id=PI.product_id
+AND PSD.create_by=UI.user_info_id;");
+
+
+            return view('report.search_invoice_result')
+                ->with('stockDetails', $stockDetails);
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
 

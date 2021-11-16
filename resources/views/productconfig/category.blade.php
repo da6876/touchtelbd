@@ -84,7 +84,7 @@
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
                                                                 <label>Categories Status</label>
-                                                                <select name="categories_status" class="form-control">
+                                                                <select id="Statuss" name="categories_status" class="form-control">
                                                                     <option value="S">Select Status</option>
                                                                     <option value="A">YES</option>
                                                                     <option value="I">NO</option>
@@ -217,13 +217,14 @@
             type: "GET",
             dataType: "JSON",
             success: function (data) {
-                $('.showCategoriesData').modal('show');
+                console.log(data);
+                $('.categoriesAdd').modal('show');
                 $('.modal-titles').text(data[0].categories_name + ' Information');
                 $('#categories_name').val(data[0].categories_name);
                 $('#Statuss option[value="' + data[0].categories_status + '"]').prop('selected', true);
-                document.getElementById('categories_name').disabled = true;
-                $('#Statuss').attr('disabled', 'disabled');
-                $('#btnUpdate').hide();
+               // document.getElementById('categories_name').disabled = true;
+              //  $('#Statuss').attr('disabled', 'disabled');
+             //   $('#btnUpdate').hide();
 
             }, error: function () {
                 swal({

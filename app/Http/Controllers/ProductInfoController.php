@@ -47,36 +47,72 @@ class ProductInfoController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = array();
-            $data['product_name'] = $request['product_name'];
-            $data['product_type_id'] = $request['product_type_id'];
-            $data['Categorie_id'] = $request['Categorie_id'];
-            $data['decs'] = $request['decs'];
-            $data['product_status'] = $request['product_status'];
-            $data['create_by'] = Session::get('user_info_id');
-            $data['update_by'] = "N";
+            if ($request['product_id']=="") {
+                $data = array();
+                $data['product_name'] = $request['product_name'];
+                $data['product_type_id'] = $request['product_type_id'];
+                $data['Categorie_id'] = $request['Categorie_id'];
+                $data['decs'] = $request['decs'];
+                $data['product_status'] = $request['product_status'];
+                $data['create_by'] = Session::get('user_info_id');
+                $data['update_by'] = "N";
 
-            $image_one = $request['product_image'];
-            if ($image_one) {
-                $ran_one = str_random(15);
-                $ext_one = strtolower($image_one->getClientOriginalExtension());
-                $one_full_name = $ran_one .'.'. $ext_one;
-                $upload_path_one = "allImages/ProductImages/";
-                $image_url_one = $upload_path_one . $one_full_name;
-                $success_one = $image_one->move($upload_path_one, $one_full_name);
+                $image_one = $request['product_image'];
+                if ($image_one) {
+                    $ran_one = str_random(15);
+                    $ext_one = strtolower($image_one->getClientOriginalExtension());
+                    $one_full_name = $ran_one . '.' . $ext_one;
+                    $upload_path_one = "allImages/ProductImages/";
+                    $image_url_one = $upload_path_one . $one_full_name;
+                    $success_one = $image_one->move($upload_path_one, $one_full_name);
 
-                $data['product_image'] = $image_url_one;
-                $result = DB::table('product_info')->insert($data);
-                return json_encode(array(
-                    "statusCode" => 200,
-                    "statusMsg" => "New Product Added Successfully"
-                ));
-            } else {
+                    $data['product_image'] = $image_url_one;
+                    $result = DB::table('product_info')->insert($data);
+                    return json_encode(array(
+                        "statusCode" => 200,
+                        "statusMsg" => "New Product Added Successfully"
+                    ));
+                } else {
 
-                return json_encode(array(
-                    "statusCode" => 201,
-                    "statusMsg" => "Please Select Product Image !!"
-                ));
+                    return json_encode(array(
+                        "statusCode" => 201,
+                        "statusMsg" => "Please Select Product Image !!"
+                    ));
+                }
+            }else{
+                $data = array();
+                $data['product_name'] = $request['product_name'];
+                $data['product_type_id'] = $request['product_type_id'];
+                $data['Categorie_id'] = $request['Categorie_id'];
+                $data['decs'] = $request['decs'];
+                $data['product_status'] = $request['product_status'];
+                $data['update_by'] = Session::get('user_info_id');
+
+                $image_one = $request['product_image'];
+                if ($image_one) {
+                    $ran_one = str_random(15);
+                    $ext_one = strtolower($image_one->getClientOriginalExtension());
+                    $one_full_name = $ran_one . '.' . $ext_one;
+                    $upload_path_one = "allImages/ProductImages/";
+                    $image_url_one = $upload_path_one . $one_full_name;
+                    $success_one = $image_one->move($upload_path_one, $one_full_name);
+
+                    $data['product_image'] = $image_url_one;
+
+                    DB::table('product_info')
+                        ->where('product_id', $request['product_id'])
+                        ->update($data);
+                    return json_encode(array(
+                        "statusCode" => 200,
+                        "statusMsg" => "Product Update Successfully"
+                    ));
+                } else {
+
+                    return json_encode(array(
+                        "statusCode" => 201,
+                        "statusMsg" => "Please Select Product Image !!"
+                    ));
+                }
             }
         } catch (\Exception $e) {
             DB::rollBack();
@@ -94,24 +130,13 @@ class ProductInfoController extends Controller
         return $singleDataShow;
     }
 
-
-    public function edit($id)
-    {
-        //
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-
     public function destroy($id)
     {
+        $data['product_status'] ="D";
         DB::table('product_info')
             ->where('product_id', $id)
-            ->delete();
+            ->update($data);
+
         return json_encode(array(
             "statusCode" => 200
         ));
@@ -120,14 +145,12 @@ class ProductInfoController extends Controller
     public function getAllProductInfo()
     {
 
-        $categories = DB::table('product_info')
-            ->get();
+        $categories = DB::select('SELECT product_id,product_name,product_type_id,Categorie_id,decs,product_image, product_status, create_by, update_by, create_info,update_info FROM product_info WHERE product_status ="Active";');
 
         return DataTables::of($categories)
             ->addColumn('action', function ($categories) {
                 $buttton = '
                 <div class="button-list">
-                    <a onclick="showProductData(' . $categories->product_id . ')" role="button" href="#" class="btn btn-success btn-sm"><i class="fa fa-external-link-square bigfonts"></i></a>
                     <a onclick="editProductData(' . $categories->product_id . ')" role="button" href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit bigfonts"></i></a>
                     <a onclick="deleteProductData(' . $categories->product_id . ')" role="button" href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-o bigfonts"></i></a>
                 </div>

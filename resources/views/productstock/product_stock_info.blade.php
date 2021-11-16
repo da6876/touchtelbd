@@ -66,6 +66,7 @@
                                             <th>Company Name</th>
                                             <th>Qty</th>
                                             <th>Available Qty</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -111,13 +112,19 @@
             {data: 'product_name', name: 'product_name'},
             {data: 'company_name', name: 'company_name'},
             {data: 'qty', name: 'qty'},
-            {data: 'avalable_qty', name: 'avalable_qty'}
+            {data: 'avalable_qty', name: 'avalable_qty'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
         ]
     });
 
 
     function  addNewAction() {
         window.location.href = 'ProductStock';
+    }
+
+    function showDetals(masterId) {
+            var postURL1 = "{{ url('StockDetails') }}" + '/' + masterId;
+            window.location = postURL1;
     }
 </script>
 <!-- END Java Script for this page -->

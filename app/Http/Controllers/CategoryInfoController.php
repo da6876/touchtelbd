@@ -65,9 +65,10 @@ class CategoryInfoController extends Controller
 
     public function destroy($id)
     {
+        $data['categories_status'] = "D";
         DB::table('categories')
             ->where('categories_id', $id)
-            ->delete();
+            ->update($data);
         return json_encode(array(
             "statusCode" => 200
         ));
@@ -76,14 +77,12 @@ class CategoryInfoController extends Controller
     public function getAllcategories()
     {
 
-        $categories = DB::table('categories')
-            ->get();
+        $categories = DB::select ('SELECT categories_id, categories_name, categories_status, create_info FROM categories WHERE categories_status = "A";');
 
         return DataTables::of($categories)
             ->addColumn('action', function ($categories) {
                 $buttton = '
                 <div class="button-list">
-                    <a onclick="showcategoriesData('.$categories->categories_id.')" role="button" href="#" class="btn btn-success btn-sm"><i class="fa fa-external-link-square bigfonts"></i></a>
                     <a onclick="deletecategoriesData('.$categories->categories_id.')" role="button" href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash-o bigfonts"></i></a>
                 </div>
                 ';

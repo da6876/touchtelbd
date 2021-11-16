@@ -59,11 +59,11 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <button class="btn btn-outline-success col-md-6" type="button"
-                                                onclick="checkEncrypt()">
+                                                onclick="checkEncrypt()"><i class="fa fa-lock" aria-hidden="true"></i>
                                             Encrypt Password
                                         </button>
                                         <button class="btn btn-outline-danger  col-md-6" type="button"
-                                                onclick="checkDeEncrypt()">
+                                                onclick="checkDeEncrypt()"><i class="fa fa-unlock" aria-hidden="true"></i>
                                             DeEncrypt Password
                                         </button>
                                     </div>

@@ -167,7 +167,7 @@
 
     function showal(invoice) {
         alert(invoice);
-        var postURL1 = "{{url('CashMemo')}}"+'/'+invoice;
+        var postURL1 = "{{url('StockDetailsReport')}}"+'/'+invoice;
         postURL1 = postURL1.replace(/\s/g, '');
         alert(postURL1);
         window.location = postURL1;

@@ -60,6 +60,7 @@ Route::get('showCompanyList','ProductStockController@showCompanyList');
 Route::get('ProductStockBulk','ProductStockController@indexs');
 Route::get('ProductStockInfo','ProductStockController@indexView');
 Route::get('/get/all/ProductStock','ProductStockController@getAllStockInfo')->name('all.ProductStock');
+Route::get('StockDetails/{masterId}','ProductStockController@seeStockDetails');
 
 
 Route::resource('RegulerSell','RegulerSellController');
@@ -77,3 +78,4 @@ Route::post('/autocomplete/searchInvoiceByNo', 'RegulerSellController@searchInvo
 Route::get('StockDetails','ProductStockController@getStockInfoDetails');
 Route::get('InvoiceSearch','RegulerSellController@invoiceSearchIN');
 Route::post('/autocomplete/searchInvoiceByNoIn', 'RegulerSellController@searchInvoiceByNoIn')->name('autocomplete.searchInvoiceByNoIn');
+Route::get('StockDetailsReport/{masterId}','ProductStockController@seeStockDetailsReport');
